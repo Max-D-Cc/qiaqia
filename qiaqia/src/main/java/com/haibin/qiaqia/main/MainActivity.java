@@ -53,7 +53,6 @@ import okhttp3.Call;
  *
  */
 public class MainActivity extends BaseActivity {
-
     @BindView(R.id.tabHost) CommonTabLayout tabHost;
     @BindView(R.id.mainPager) ViewPager mainPager;
     private ViewPagerAdapter adapter;
