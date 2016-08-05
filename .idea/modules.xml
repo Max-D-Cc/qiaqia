@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dialoglibrary/dialoglibrary.iml" filepath="$PROJECT_DIR$/dialoglibrary/dialoglibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/multi-image-selector/multi-image-selector.iml" filepath="$PROJECT_DIR$/multi-image-selector/multi-image-selector.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qiaqia.iml" filepath="$PROJECT_DIR$/qiaqia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qiaqia/qiaqia-qiaqia.iml" filepath="$PROJECT_DIR$/qiaqia/qiaqia-qiaqia.iml" />
+    </modules>
+  </component>
+</project>
