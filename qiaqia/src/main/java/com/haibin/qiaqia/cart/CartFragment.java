@@ -1,6 +1,7 @@
 package com.haibin.qiaqia.cart;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * A simple {@link } subclass.
@@ -54,6 +56,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     private LinearLayoutManager mLayoutManager;
     public List<ListChaoCommodity> listChaoCommodities = new ArrayList<ListChaoCommodity>();
     SubscriberOnNextListener<Goods> SubListener;
+    private List<Integer> delGoodsList = new ArrayList<Integer>();
 
     private int clickNum = 0;
 
@@ -78,6 +81,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         cartSum.setOnClickListener(this);
         cartDelete.setOnClickListener(this);
+        cartSubmit.setOnClickListener(this);
 
         adapter.setOnGoodsListener(new CartAdapter.OnGoodsAMLitener() {
             @Override
@@ -95,8 +99,17 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             }
 
             @Override
-            public void deleteGoods(int postion) {
-
+            public void deleteGoods(int postion, boolean isChecked) {
+                if (isChecked) {
+                    delGoodsList.add(postion);
+                } else {
+                    for (int i = 0; i < delGoodsList.size(); i++) {
+                        int currPostion = delGoodsList.get(i);
+                        if (currPostion == postion) {
+                            delGoodsList.remove(i);
+                        }
+                    }
+                }
             }
         });
         ;
@@ -118,25 +131,56 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.cart_delete:
                 boolean over = isOver(clickNum);
-                if (over){
+                if (over) {
                     adapter.isShowChexkBox(true);
                     adapter.notifyDataSetChanged();
-                    clickNum ++;
-                }else{
-                    adapter.isShowChexkBox(false);
-                    adapter.notifyDataSetChanged();
-                    clickNum ++;
-
+                    clickNum++;
+                } else {
+                    if (delGoodsList.size() != 0){
+                        deleteDialog();
+                    }else{
+                        adapter.isShowChexkBox(false);
+                        adapter.notifyDataSetChanged();
+                    }
+                    clickNum++;
                 }
                 break;
             case R.id.cart_submit:
+                Goods goods = new Goods();
+                goods.setListChaoCommodity(listChaoCommodities);
+                Intent intent = new Intent(getActivity(),OrderActivity.class);
+                intent.putExtra("balanceData",goods);
+                startActivity(intent);
                 break;
             default:
                 break;
         }
+    }
+
+    private void deleteDialog() {
+        final SweetAlertDialog dialog = new SweetAlertDialog(getActivity(),SweetAlertDialog.WARNING_TYPE);
+        dialog.setTitleText("确认删除").setConfirmText("确认").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                for (int i = 0; i < delGoodsList.size(); i++) {
+                    int position = delGoodsList.get(i);
+                    listChaoCommodities.remove(position);
+                }
+                adapter.isShowChexkBox(false);
+                adapter.notifyDataSetChanged();
+                dialog.dismiss();
+                setCountMoney();
+            }
+        })/*.setCancelText("否").setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                dialog.dismiss();
+            }
+        })*/.show();
+
     }
 
     private void setCountMoney() {
@@ -165,9 +209,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         return b1.multiply(b2).doubleValue();
     }
 
-    public boolean isOver(int num){
+    public boolean isOver(int num) {
         if (num % 2 == 0)
-            return  true;
+            return true;
         else
             return false;
     }

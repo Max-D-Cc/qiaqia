@@ -51,7 +51,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         //加商品
         void addGoods(int postion);
         //删除商品
-        void deleteGoods(int postion);
+        void deleteGoods(int postion,boolean isChecked);
     }
 
     public CartAdapter(Context context, List<ListChaoCommodity> list) {
@@ -81,6 +81,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.tvColorName.setText(data.getAlias());
         holder.tvItemPrice.setText(mul(data.getPrice(), data.getCount()) + "元");
         holder.tvItemCount.setText(String.valueOf(data.getCount()));
+        holder.cart_cb.setChecked(false);
         Glide.with(context)
                 .load(data.getImage())
                 .placeholder(R.drawable.ic_loading_rotate)
@@ -103,7 +104,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.cart_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mOnItemClickListener.deleteGoods(position);
+                mOnItemClickListener.deleteGoods(position,isChecked);
             }
         });
 //        holder.itemView.setTag(data);
@@ -141,7 +142,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
         }
     }
 
