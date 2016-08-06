@@ -33,6 +33,7 @@ import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.cart.CartFragment;
 import com.haibin.qiaqia.entity.TabEntity;
 import com.haibin.qiaqia.home.HomeFragment;
+import com.haibin.qiaqia.personal.MineFragment;
 import com.haibin.qiaqia.utils.ActivityManager;
 import com.haibin.qiaqia.utils.LogUtils;
 import com.haibin.qiaqia.widget.SystemBarTintManager;
@@ -462,7 +463,7 @@ public class MainActivity extends BaseActivity {
                 case 1:
                     return new CartFragment();          //话题榜
                 case 2:
-                    return new CartFragment();  //用户榜
+                    return new MineFragment();  //用户榜
                 default:
                     return new CartFragment();
             }

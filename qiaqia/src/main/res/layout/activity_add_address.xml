@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/activity_add_address"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.haibin.qiaqia.cart.AddAddressActivity">
+<RelativeLayout
+    android:id="@+id/top"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/app_color"
+    >
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:text="添加收货地址"
+    android:textSize="16dp"
+    android:textColor="@color/black"
+    android:layout_centerInParent="true"
+    android:gravity="center"
+    />
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@mipmap/back_arrow"
+    android:padding="5dp"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="15dp"
+    />
+</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/rl_name"
+        android:layout_below="@id/top"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="45dp">
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="姓名："
+            android:textSize="14dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_toRightOf="@id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="请输入姓名"
+            android:textSize="12dp"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:layout_alignParentBottom="true"
+        />
+    <RadioGroup
+        android:id="@+id/rg_sex"
+        android:layout_below="@id/rl_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="男"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="女"
+            />
+    </RadioGroup>
+    <LinearLayout
+        android:id="@+id/rl_phone"
+        android:layout_below="@id/rg_sex"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="45dp">
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="手机号："
+            android:textSize="14dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="请输入手机号码，以便快递员联系您"
+            android:textSize="12dp"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            android:layout_alignParentBottom="true"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_address"
+        android:layout_below="@id/rl_phone"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="收货地址："
+            android:textSize="14dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/textView3"/>
+
+        <EditText
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="请输入收货地址"
+            android:textSize="12dp"
+            android:layout_alignBottom="@+id/textView3"
+            android:layout_toRightOf="@+id/tv_address"
+            android:layout_toEndOf="@+id/tv_address"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:id="@+id/et_address"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_door"
+        android:layout_below="@id/rl_address"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+
+        <TextView
+            android:id="@+id/tv_door"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="楼号/门牌号："
+            android:textSize="14dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/textView4"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="例如：1号楼001室"
+            android:textSize="12dp"
+            android:layout_alignBottom="@+id/textView4"
+            android:layout_toRightOf="@+id/tv_door"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:id="@+id/et_door"/>
+    </RelativeLayout>
+</RelativeLayout>
