@@ -10,12 +10,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
+import com.haibin.qiaqia.utils.GlideRoundTransform;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by cai on 2016/6/25.
@@ -66,7 +66,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         Glide.with(context)
                 .load(data.getImage())
                 .placeholder(R.drawable.ic_loading_rotate)
-                .crossFade()
+                .transform(new GlideRoundTransform(context))
                 .into(holder.img);
         holder.itemView.setTag(data);
     }
