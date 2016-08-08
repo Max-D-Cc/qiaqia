@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f3f3f3"
+    android:background="#ffffff"
     >
 
 <LinearLayout
@@ -28,14 +28,7 @@
     android:layout_marginTop="5dp"
     android:layout_marginRight="5dp"
     />
-        <ImageView
-            android:id="@+id/img_head"
-            android:layout_width="68dp"
-            android:layout_height="68dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="18dp"
-            android:src="@mipmap/logo_login"
-            />
+
         <TextView
             android:id="@+id/name"
             android:layout_below="@+id/img_head"
@@ -167,68 +160,104 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
-    </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/img_head"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:src="@mipmap/logo_login"
+            android:layout_below="@+id/iv_setting"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/white"
+        />
+    <LinearLayout
+        android:id="@+id/ll_icon"
+        android:layout_width="match_parent"
+        android:layout_height="43.5dp"
+        android:orientation="horizontal"
+        android:background="@color/app_color"
+        android:gravity="bottom"
+        >
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/qianbao"
+            />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/shouhuo"
+            />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/wancheng"
+            />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/shouhou"
+            />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/ll_wallte_realname"
         android:layout_width="match_parent"
-        android:layout_height="43.5dp"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="@color/white"
+        android:background="@color/app_color"
+        android:paddingTop="4dp"
         >
-        <LinearLayout
-            android:id="@+id/ll_money"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginRight="1dp"
-            android:background="?android:attr/selectableItemBackground"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/qianbao"
-                />
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_wait_pay"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginLeft="10dp"
-                android:text="我的钱包"
+                android:text="待付款"
+                android:textColor="@color/white"
                 android:textSize="14dp"
-                />
-        </LinearLayout>
-        <ImageView
-            android:layout_width="1dp"
-            android:layout_height="36dp"
-            android:background="#f3f3f3"
-            android:layout_gravity="center"
-            />
-        <LinearLayout
-            android:id="@+id/ll_real_name"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginLeft="1dp"
-            android:background="?android:attr/selectableItemBackground"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="实名认证 "
+                android:gravity="center"
+                android:text="待收货 "
+                android:textColor="@color/white"
                 android:layout_marginLeft="10dp"
                 android:textSize="15dp"
-                android:id="@+id/textView5"/>
-        </LinearLayout>
+                android:id="@+id/tv_wait_get"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="已完成 "
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:textSize="15dp"
+            android:id="@+id/tv_finish"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="退款/售后 "
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:textSize="15dp"
+            android:id="@+id/tv_after_salas"/>
     </LinearLayout>
 
     <LinearLayout
@@ -237,11 +266,6 @@
         android:orientation="vertical"
         android:background="@color/white"
         >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="#f3f3f3"
-            />
     <RelativeLayout
         android:id="@+id/credit"
         android:layout_width="match_parent"
@@ -249,9 +273,9 @@
         android:gravity="center_vertical"
         android:layout_gravity="center"
         android:background="?android:attr/selectableItemBackground"
-        android:paddingLeft="15dp"
         >
         <ImageView
+            android:paddingLeft="15dp"
             android:id="@+id/or_img"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -280,10 +304,10 @@
             />
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.7dp"
             android:layout_marginLeft="3dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray_btn_bg_color"
+            android:background="@color/gray_split_color"
             />
     </RelativeLayout>
 
@@ -294,7 +318,7 @@
         android:gravity="center_vertical"
         android:layout_gravity="center"
         android:background="?android:attr/selectableItemBackground"
-        android:paddingLeft="15dp"
+
         >
 
         <TextView
@@ -318,14 +342,15 @@
             />
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.7dp"
             android:layout_marginLeft="3dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray_btn_bg_color"
+            android:background="@color/gray_split_color"
             />
 
         <ImageView
             android:id="@+id/point_img9"
+            android:paddingLeft="15dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/youhuiquan"
@@ -393,9 +418,9 @@
         android:gravity="center_vertical"
         android:layout_gravity="center"
         android:background="?android:attr/selectableItemBackground"
-        android:paddingLeft="15dp"
         >
         <ImageView
+            android:paddingLeft="15dp"
             android:id="@+id/point_img"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -413,10 +438,10 @@
             />
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.7dp"
             android:layout_marginLeft="3dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray_btn_bg_color"
+            android:background="@color/gray_split_color"
             />
         <ImageView
             android:layout_alignParentRight="true"
@@ -477,11 +502,7 @@
             />
 
     </RelativeLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#f3f3f3"
-            />
+
     <RelativeLayout
         android:id="@+id/rl_feedback"
         android:layout_width="match_parent"
@@ -489,7 +510,6 @@
         android:gravity="center_vertical"
         android:layout_gravity="center"
         android:background="?android:attr/selectableItemBackground"
-        android:paddingLeft="15dp"
         >
         <ImageView
             android:id="@+id/or_img5"
@@ -497,6 +517,7 @@
             android:layout_height="match_parent"
             android:src="@mipmap/yijian"
             android:gravity="center"
+            android:paddingLeft="15dp"
             />
 
         <ImageView
@@ -511,9 +532,9 @@
             />
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.7dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray_btn_bg_color"
+            android:background="@color/gray_split_color"
             android:layout_marginLeft="3dp"
             />
 
@@ -529,6 +550,7 @@
             android:layout_toEndOf="@+id/or_img5"
             android:id="@+id/textView3"/>
     </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_updata"
             android:layout_width="match_parent"
@@ -536,9 +558,9 @@
             android:gravity="center_vertical"
             android:layout_gravity="center"
             android:background="?android:attr/selectableItemBackground"
-            android:paddingLeft="15dp"
             >
             <ImageView
+                android:paddingLeft="15dp"
                 android:id="@+id/or_img8"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -558,9 +580,9 @@
                 />
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.7dp"
                 android:layout_alignParentBottom="true"
-                android:background="@color/gray_btn_bg_color"
+                android:background="@color/gray_split_color"
                 android:layout_marginLeft="3dp"
                 />
 
@@ -576,7 +598,8 @@
                 android:layout_toEndOf="@+id/or_img8"
                 android:id="@+id/textView8"/>
         </RelativeLayout>
-    <RelativeLayout
+
+        <RelativeLayout
         android:id="@+id/rl_setting"
         android:layout_width="match_parent"
         android:layout_height="43dp"
@@ -617,9 +640,9 @@
         android:layout_height="43dp"
         android:gravity="center_vertical"
         android:background="?android:attr/selectableItemBackground"
-        android:paddingLeft="15dp"
         >
         <ImageView
+            android:paddingLeft="15dp"
             android:id="@+id/img_03"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -647,11 +670,10 @@
             />
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.7dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray_btn_bg_color"
-            android:layout_marginLeft="3dp"
-            android:visibility="gone"
+            android:background="@color/gray_split_color"
+            android:layout_marginLeft="0dp"
             />
     </RelativeLayout>
     </LinearLayout>
