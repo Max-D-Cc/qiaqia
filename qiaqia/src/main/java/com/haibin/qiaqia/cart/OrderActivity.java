@@ -11,6 +11,11 @@ import android.widget.TextView;
 
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseActivity;
+import com.haibin.qiaqia.entity.Goods;
+import com.haibin.qiaqia.entity.ListChaoCommodity;
+
+import java.io.Serializable;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +61,9 @@ public class OrderActivity extends BaseActivity {
     public void setContentView() {
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
+        Goods goods = (Goods) getIntent().getSerializableExtra("balanceData");
+        List<ListChaoCommodity> listChaoCommodity = goods.getListChaoCommodity();
+
     }
 
     @Override

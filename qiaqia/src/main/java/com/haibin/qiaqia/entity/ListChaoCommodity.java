@@ -3,10 +3,12 @@ package com.haibin.qiaqia.entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by invinjun on 2016/6/20.
  */
-public class ListChaoCommodity {
+public class ListChaoCommodity implements Serializable{
 
     @SerializedName("id")
     @Expose

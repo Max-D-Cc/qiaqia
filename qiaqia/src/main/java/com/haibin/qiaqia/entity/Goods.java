@@ -3,6 +3,7 @@ package com.haibin.qiaqia.entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * Created by invinjun on 2016/6/2.
  */
 
-public class Goods {
+public class Goods implements Serializable {
 
     @SerializedName("list_chao_commodity")
     @Expose
