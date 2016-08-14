@@ -19,8 +19,6 @@ public class MineFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         ButterKnife.bind(this, view);
-//        initView();
-//        initData();
         return view;
     }
 }

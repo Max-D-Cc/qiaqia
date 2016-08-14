@@ -2,6 +2,7 @@ package com.haibin.qiaqia.cart;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -14,7 +15,6 @@ import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
 
-import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class OrderActivity extends BaseActivity {
+
 
     @BindView(R.id.top) RelativeLayout top;
     @BindView(R.id.iv_name) ImageView ivName;
@@ -36,11 +37,15 @@ public class OrderActivity extends BaseActivity {
     @BindView(R.id.tv_location) TextView tvLocation;
     @BindView(R.id.et_order_location) EditText etOrderLocation;
     @BindView(R.id.iv_location_edit) ImageView ivLocationEdit;
+    @BindView(R.id.textView5) TextView textView5;
     @BindView(R.id.tv_send_method) TextView tvSendMethod;
     @BindView(R.id.rl_send_time) RelativeLayout rlSendTime;
-    @BindView(R.id.tv_add_require) TextView tvAddRequire;
+    @BindView(R.id.tv_beizhu) TextView tvBeizhu;
+    @BindView(R.id.et_add_require) EditText etAddRequire;
     @BindView(R.id.rl_beizhu) RelativeLayout rlBeizhu;
     @BindView(R.id.rcv_order_cart) RecyclerView rcvOrderCart;
+    @BindView(R.id.tv_send_money) TextView tvSendMoney;
+    @BindView(R.id.tv_count_money) TextView tvCountMoney;
     @BindView(R.id.iv_weixin) ImageView ivWeixin;
     @BindView(R.id.cb_wxpay) CheckBox cbWxpay;
     @BindView(R.id.rl_wxpay) RelativeLayout rlWxpay;
@@ -49,6 +54,9 @@ public class OrderActivity extends BaseActivity {
     @BindView(R.id.rl_alipay) RelativeLayout rlAlipay;
     @BindView(R.id.cb_send_money) CheckBox cbSendMoney;
     @BindView(R.id.btn_order) Button btnOrder;
+    @BindView(R.id.name) TextView name;
+    @BindView(R.id.tel) TextView tel;
+    @BindView(R.id.address) TextView address;
     @BindView(R.id.activity_order) RelativeLayout activityOrder;
 
     @Override
@@ -88,5 +96,15 @@ public class OrderActivity extends BaseActivity {
 
     @OnClick(R.id.btn_order)
     public void onClick() {
+    }
+
+    @OnClick({R.id.rl_send_time, R.id.btn_order})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.rl_send_time:
+                break;
+            case R.id.btn_order:
+                break;
+        }
     }
 }
