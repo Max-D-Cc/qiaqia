@@ -1,6 +1,8 @@
 package com.haibin.qiaqia.http;
 
 import com.haibin.qiaqia.base.Constants;
+import com.haibin.qiaqia.entity.Address;
+import com.haibin.qiaqia.entity.AddressList;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.HttpResult;
 import com.haibin.qiaqia.entity.Market;
@@ -49,12 +51,12 @@ public class HttpMethods {
     }
 
     //在访问HttpMethods时创建单例
-    private static class SingletonHolder{
+    private static class SingletonHolder {
         private static final HttpMethods INSTANCE = new HttpMethods();
     }
 
     //获取单例
-    public static HttpMethods getInstance(){
+    public static HttpMethods getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -73,39 +75,44 @@ public class HttpMethods {
             return httpResult.getData();
         }
     }
+
     /**
      * 用户注册
+     *
      * @param subscriber 由调用者传过来的观察者对象
-     * @param phone 手机号
-     * @param password 密码
-     * @param sms 验证码
+     * @param phone      手机号
+     * @param password   密码
+     * @param sms        验证码
      */
 
-    public void  toRegister(Subscriber<User> subscriber,  String phone, String password, String sms){
+    public void toRegister(Subscriber<User> subscriber, String phone, String password, String sms) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.toRegister(only, phone,password,sms)
+        methodInterface.toRegister(only, phone, password, sms)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
-    public void getSms(Subscriber<String> subscriber ,String phone){
+
+    public void getSms(Subscriber<String> subscriber, String phone) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.getSMS(only,phone)
+        methodInterface.getSMS(only, phone)
                 .map(new HttpResultFunc<String>())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
     /**
-     *获取首页数据
-     *@author invinjun
-     *created at 2016/6/15 11:30
+     * 获取首页数据
+     *
      * @param
      * @param
      * @param subscriber
+     * @author invinjun
+     * created at 2016/6/15 11:30
      */
-    public void getHomeData(Subscriber <Goods> subscriber ){
+    public void getHomeData(Subscriber<Goods> subscriber) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
         methodInterface.getHomeInfo(only)
                 .map(new HttpResultFunc<Goods>())
@@ -114,9 +121,10 @@ public class HttpMethods {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
-    public void Login(Subscriber<User> subscriber ,String phone,String password){
+
+    public void Login(Subscriber<User> subscriber, String phone, String password) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.toLogin(only,phone,password)
+        methodInterface.toLogin(only, phone, password)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -126,33 +134,35 @@ public class HttpMethods {
     /**
      * 获取超市分类
      */
-    public void getMarketClass(Subscriber<Market> subscriber,String type){
+    public void getMarketClass(Subscriber<Market> subscriber, String type) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.getMarketClass(only,type)
+        methodInterface.getMarketClass(only, type)
                 .map(new HttpResultFunc<Market>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
     /**
      * 获取超市分类
      */
-    public void getGoods(Subscriber<Goods> subscriber,String loginId,String categoryId){
+    public void getGoods(Subscriber<Goods> subscriber, String loginId, String categoryId) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.getGoods(only,loginId,categoryId)
+        methodInterface.getGoods(only, loginId, categoryId)
                 .map(new HttpResultFunc<Goods>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
     /**
      * 加减删除购物车商品
      */
-    public void getChangeCarGoods(Subscriber<Goods> subscriber,String login_id,String commodity_id,String count){
+    public void getChangeCarGoods(Subscriber<Goods> subscriber, String login_id, String commodity_id, String count) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.getChangeCarGoods(only,login_id,commodity_id,count)
+        methodInterface.getChangeCarGoods(only, login_id, commodity_id, count)
                 .map(new HttpResultFunc<Goods>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -162,13 +172,30 @@ public class HttpMethods {
 
     /**
      * 购物车
+     *
      * @param subscriber
      * @param login_id
      */
-    public void getCarInfo(Subscriber<Goods> subscriber,String login_id){
+    public void getCarInfo(Subscriber<Goods> subscriber, String login_id) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.getCarInfo(only,login_id)
+        methodInterface.getCarInfo(only, login_id)
                 .map(new HttpResultFunc<Goods>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+
+    /**
+     * 获取全部收获地址列表
+     * @param subscriber
+     * @param login_id
+     */
+    public void getAddressList(Subscriber<AddressList> subscriber, String login_id) {
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getAddressList(only, login_id)
+                .map(new HttpResultFunc<AddressList>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -1,5 +1,7 @@
 package com.haibin.qiaqia.service;
 
+import com.haibin.qiaqia.entity.Address;
+import com.haibin.qiaqia.entity.AddressList;
 import com.haibin.qiaqia.entity.CategoryGoods;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.HttpResult;
@@ -71,14 +73,18 @@ public interface MethodInterface {
 /**
  * 超市修改分类
  */
-        @POST(" I_chao_class_Update_Servlet")
+        @POST("I_chao_class_Update_Servlet")
         Observable<HttpResult<Goods>> updateCategory(@Query("only") String only , @Query("id") String id , @Query("name") String name);
 /**
  * 超市分类商品
  */
         @GET("I_chao_commodity_List_Id_Servlet")
         Observable<HttpResult<CategoryGoods>> getCategoryGoods(@Query("only") String only , @Query("login_id") String login_id , @Query("chao_class_id") String chao_class_id);
-
+/**
+ * 收获地址表
+ */
+        @GET("I_user_address_All_Servlet")
+        Observable<HttpResult<AddressList>> getAddressList(@Query("only") String only , @Query("login_id") String login_id);
 
 
 
