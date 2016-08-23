@@ -25,10 +25,21 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
     private Context context;
     private List<Address> list;
+    private boolean isDelete = false;
+    private OnAddressListener listener;
+
 
     public AddressAdapter(Context context,List<Address> list) {
         this.context = context;
         this.list = list;
+    }
+
+    public interface OnAddressListener{
+        void onUpdateAddress(int position);
+    }
+
+    public void setOnAddressListener(OnAddressListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -39,11 +50,22 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Address address = list.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        if (isDelete){
+            holder.itemAdrCb.setVisibility(View.VISIBLE);
+        }else{
+            holder.itemAdrCb.setVisibility(View.GONE);
+        }
 
+        Address address = list.get(position);
         holder.itemAdrNp.setText(address.getName() + "  " + address.getPhone());
         holder.itemAdrLocation.setText(address.getPosition());
+        holder.itemAdrEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onUpdateAddress(position);
+            }
+        });
     }
 
 
@@ -65,5 +87,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+    }
+
+    public void isShowChexkBox(boolean isShow){
+        isDelete = isShow;
     }
 }

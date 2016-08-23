@@ -3,6 +3,8 @@ package com.haibin.qiaqia.service;
 import com.haibin.qiaqia.entity.Address;
 import com.haibin.qiaqia.entity.AddressList;
 import com.haibin.qiaqia.entity.CategoryGoods;
+import com.haibin.qiaqia.entity.Coupon;
+import com.haibin.qiaqia.entity.CouponList;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.HttpResult;
 import com.haibin.qiaqia.entity.Market;
@@ -85,8 +87,16 @@ public interface MethodInterface {
  */
         @GET("I_user_address_All_Servlet")
         Observable<HttpResult<AddressList>> getAddressList(@Query("only") String only , @Query("login_id") String login_id);
+/**
+ * 添加地址表
+ */
+        @POST("I_user_address_Insert_Servlet")
+        Observable<HttpResult<Address>> addAddress(@Query("only") String only , @Query("login_id") String login_id , @Query("name") String name , @Query("phone") String phone, @Query("lon") String lon , @Query("lat") String lat, @Query("gps") String gps, @Query("position") String position);
 
-
-
+/**
+ * 优惠券接口
+ */
+        @GET("I_coupon_List_Servlet")
+        Observable<HttpResult<CouponList>> getCouponList(@Query("only") String only , @Query("login_id") String login_id );
 
 }

@@ -3,6 +3,7 @@ package com.haibin.qiaqia.http;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.Address;
 import com.haibin.qiaqia.entity.AddressList;
+import com.haibin.qiaqia.entity.CouponList;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.HttpResult;
 import com.haibin.qiaqia.entity.Market;
@@ -189,6 +190,7 @@ public class HttpMethods {
 
     /**
      * 获取全部收获地址列表
+     *
      * @param subscriber
      * @param login_id
      */
@@ -196,6 +198,42 @@ public class HttpMethods {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
         methodInterface.getAddressList(only, login_id)
                 .map(new HttpResultFunc<AddressList>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 添加地址到服务器
+     * @param subscriber
+     * @param login_id
+     * @param name
+     * @param phone
+     * @param lon
+     * @param lat
+     * @param gps
+     * @param position
+     */
+    public void addAddress(Subscriber<Address> subscriber, String login_id, String name, String phone, String lon, String lat, String gps, String position) {
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.addAddress(only,login_id,name,phone,lon,lat,gps,position)
+                .map(new HttpResultFunc<Address>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取优惠券列表
+     * @param subscriber
+     * @param login_id
+     */
+    public void getConpon(Subscriber<CouponList> subscriber, String login_id){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getCouponList(only,login_id)
+                .map(new HttpResultFunc<CouponList>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

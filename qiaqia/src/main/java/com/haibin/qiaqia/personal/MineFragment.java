@@ -121,6 +121,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
     private void ininView() {
         credit.setOnClickListener(this);
+        llGuanli.setOnClickListener(this);
+        llCollect.setOnClickListener(this);
+        rlFeedback.setOnClickListener(this);
+        rlUpdata.setOnClickListener(this);
+        about.setOnClickListener(this);
     }
 
     @Override
@@ -128,6 +133,21 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.credit:
                 startActivity(new Intent(getActivity(),AddressActivity.class));
+                break;
+            case R.id.ll_guanli:
+                startActivity(new Intent(getActivity(),CouponActivity.class));
+                break;
+            case R.id.ll_collect:
+                startActivity(new Intent(getActivity(),CollectionActivity.class));
+                break;
+            case R.id.rl_feedback:
+                startActivity(new Intent(getActivity(),SuggestActivity.class));
+                break;
+            case R.id.rl_updata:
+                startActivity(new Intent(getActivity(),UpdateActivity.class));
+                break;
+            case R.id.about:
+                startActivity(new Intent(getActivity(),AboutOursActivity.class));
                 break;
         }
     }

@@ -66,6 +66,7 @@
         android:background="@color/gray" />
 
     <RadioGroup
+        android:visibility="gone"
         android:id="@+id/rg_sex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -191,4 +192,15 @@
             android:hint="例如：1号楼001室"
             android:textSize="12dp" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/addads_save"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/app_color"
+        android:layout_alignParentBottom="true"
+        android:textSize="20sp"
+        android:text="保存"
+        android:gravity="center"
+        />
 </RelativeLayout>

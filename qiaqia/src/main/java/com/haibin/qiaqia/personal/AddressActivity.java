@@ -26,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AddressActivity extends BaseActivity implements View.OnClickListener {
 
@@ -38,9 +39,11 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
     @BindView(R.id.adrs_addAddress)
     LinearLayout adrsAddAddress;
     private AddressAdapter adapter;
+    private List<Integer> delAddressList = new ArrayList<Integer>();
 
     private List<Address> adrList = new ArrayList<Address>();
     private SubscriberOnNextListener<AddressList> subListener;
+    private int clickNum = 0;
 
     @Override
     public void setContentView() {
@@ -57,6 +60,7 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
     public void initListeners() {
         adrsAddAddress.setOnClickListener(this);
         adrsBack.setOnClickListener(this);
+        adrsDelete.setOnClickListener(this);
     }
 
     @Override
@@ -66,6 +70,20 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
         adrsRv.setLayoutManager(manager);
         adrsRv.setItemAnimator(new DefaultItemAnimator());
         adrsRv.setAdapter(adapter);
+        adapter.setOnAddressListener(new AddressAdapter.OnAddressListener() {
+            @Override
+            public void onUpdateAddress(int position) {
+                Address address = adrList.get(position);
+                Intent intent = new Intent();
+                intent.setClass(AddressActivity.this,AddAddressActivity.class);
+                intent.putExtra("name",address.getName());
+                intent.putExtra("phone",address.getPhone());
+                intent.putExtra("location",address.getPosition());
+                intent.putExtra("type",1);
+                startActivity(intent);
+            }
+        });
+
         int loginId = (int) SPUtils.getParam(this, Constants.USER_INFO, Constants.INFO_ID, 0);
         subListener = new SubscriberOnNextListener<AddressList>() {
             @Override
@@ -76,7 +94,6 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
                 adapter.notifyDataSetChanged();
             }
         };
-
         HttpMethods.getInstance().getAddressList(new ProgressSubscriber<AddressList>(subListener,this),String.valueOf(loginId));
 
     }
@@ -93,8 +110,62 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.adrs_addAddress:
-                startActivity(new Intent(this, AddAddressActivity.class));
+                Intent intent = new Intent();
+                intent.setClass(AddressActivity.this,AddAddressActivity.class);
+                intent.putExtra("type",0);
+                startActivity(intent);
+                break;
+            case R.id.adrs_delete:
+                boolean over = isOver(clickNum);
+                if (over) {
+                    adapter.isShowChexkBox(true);
+                    adapter.notifyDataSetChanged();
+                    clickNum++;
+                } else {
+                    if (delAddressList.size() != 0){
+                        deleteDialog();
+                    }else{
+                        adapter.isShowChexkBox(false);
+                        adapter.notifyDataSetChanged();
+                    }
+                    clickNum++;
+                }
                 break;
         }
+    }
+
+    private void deleteDialog() {
+        final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+        dialog.setTitleText("确认删除").setConfirmText("确认").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                for (int i = 0; i < delAddressList.size(); i++) {
+                    int position = delAddressList.get(i);
+                    adrList.remove(position);
+                }
+                adapter.isShowChexkBox(false);
+                adapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        })/*.setCancelText("否").setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                dialog.dismiss();
+            }
+        })*/.show();
+    }
+
+
+    public boolean isOver(int num) {
+        if (num % 2 == 0)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        clickNum = 0;
     }
 }
