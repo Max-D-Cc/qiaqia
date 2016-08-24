@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:text="选择收获地址"
             android:textSize="18.5dp"
+            android:textColor="@color/black"
             android:layout_centerInParent="true"
             />
 

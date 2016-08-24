@@ -1,7 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@color/app_bg"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include layout="@layout/include_titlebar"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="15dp"
+        android:layout_height="140dp"
+        android:hint="请输入您的意见，我们将不断优化"
+        android:gravity="top|left"
+        android:textSize="16sp"
+        android:maxLength="100"
+        android:textColorHint="@color/textgrayno"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+         />
+    
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="16sp"
+        android:paddingLeft="5dp"
+        android:textColorHint="@color/textgrayno"
+        android:hint="请输入您的QQ号/手机号"
+        android:background="@color/white"
+        android:layout_marginTop="15dp"/>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_qyellow"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="40dp"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:gravity="center"
+        />
 </LinearLayout>

@@ -75,6 +75,9 @@
         <activity
             android:name=".personal.UpdateActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".personal.MyOrderActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

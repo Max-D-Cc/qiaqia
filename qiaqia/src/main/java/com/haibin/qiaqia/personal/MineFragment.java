@@ -47,8 +47,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     ImageView imgHead;
     @BindView(R.id.account)
     RelativeLayout account;
-    @BindView(R.id.ll_icon)
-    LinearLayout llIcon;
+    /*@BindView(R.id.ll_icon)
+    LinearLayout llIcon;*/
     @BindView(R.id.tv_wait_pay)
     TextView tvWaitPay;
     @BindView(R.id.tv_wait_get)
@@ -126,6 +126,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         rlFeedback.setOnClickListener(this);
         rlUpdata.setOnClickListener(this);
         about.setOnClickListener(this);
+        tvWaitPay.setOnClickListener(this);
+        tvWaitGet.setOnClickListener(this);
+        tvFinish.setOnClickListener(this);
+        tvAfterSalas.setOnClickListener(this);
     }
 
     @Override
@@ -148,6 +152,30 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
                 break;
             case R.id.about:
                 startActivity(new Intent(getActivity(),AboutOursActivity.class));
+                break;
+            case R.id.tv_wait_pay:
+                Intent intent = new Intent();
+                intent.setClass(getActivity(),MyOrderActivity.class);
+                intent.putExtra("currentPage",0);
+                startActivity(intent);
+                break;
+            case R.id.tv_wait_get:
+                Intent intent1 = new Intent();
+                intent1.setClass(getActivity(),MyOrderActivity.class);
+                intent1.putExtra("currentPage",1);
+                startActivity(intent1);
+                break;
+            case R.id.tv_finish:
+                Intent intent2 = new Intent();
+                intent2.setClass(getActivity(),MyOrderActivity.class);
+                intent2.putExtra("currentPage",2);
+                startActivity(intent2);
+                break;
+            case R.id.tv_after_salas:
+                Intent intent3 = new Intent();
+                intent3.setClass(getActivity(),MyOrderActivity.class);
+                intent3.putExtra("currentPage",3);
+                startActivity(intent3);
                 break;
         }
     }

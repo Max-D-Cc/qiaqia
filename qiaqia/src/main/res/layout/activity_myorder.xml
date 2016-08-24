@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/activity_fruit_vegetable"
+    android:id="@+id/activity_myorder"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,11 +9,12 @@
     android:layout_height="match_parent"
     tools:context="com.haibin.qiaqia.fruitvegetables.FruitVegetableActivity"
     >
-
-
+    <include
+        android:id="@+id/mo_top"
+        layout="@layout/include_titlebar"/>
     <android.support.v4.view.ViewPager
-        android:layout_below="@+id/sliding_tab"
-        android:id="@+id/vp"
+        android:layout_below="@+id/msliding_tab"
+        android:id="@+id/mvp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
@@ -21,33 +22,19 @@
         android:layout_alignParentStart="true">
 
     </android.support.v4.view.ViewPager>
-    <RelativeLayout
-        android:id="@+id/rl_click"
-        android:layout_alignParentTop="true"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp">
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/back_arrow"/>
-    </RelativeLayout>
 
     <com.flyco.tablayout.SlidingTabLayout
-        android:id="@+id/sliding_tab"
+        android:layout_below="@+id/mo_top"
+        android:id="@+id/msliding_tab"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/app_color"
+        android:background="#eeeeee"
         tl:tl_tab_padding="7dp"
         tl:tl_tab_space_equal="true"
-        tl:tl_indicator_color="#eeeeee"
-        app:tl_textSelectColor="#000000"
+        tl:tl_indicator_color="@color/app_color"
+        app:tl_textSelectColor="@color/app_color"
         app:tl_textUnselectColor="#000000"
-        tl:tl_indicator_style="TRIANGLE"
-        android:layout_alignParentTop="true"
+        tl:tl_indicator_style="NORMAL"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
     </com.flyco.tablayout.SlidingTabLayout>
