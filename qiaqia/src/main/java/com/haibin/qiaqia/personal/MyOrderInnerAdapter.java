@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.haibin.qiaqia.R;
+import com.haibin.qiaqia.entity.ListChaoCommodity;
+import com.haibin.qiaqia.entity.OrderInner;
 
 import java.util.List;
 
@@ -22,9 +25,9 @@ public class MyOrderInnerAdapter extends RecyclerView.Adapter<MyOrderInnerAdapte
 
 
     private Context context;
-    private List list;
+    private List<ListChaoCommodity> list;
 
-    public MyOrderInnerAdapter(Context context, List list) {
+    public MyOrderInnerAdapter(Context context, List<ListChaoCommodity> list) {
         this.context = context;
         this.list = list;
     }
@@ -38,12 +41,17 @@ public class MyOrderInnerAdapter extends RecyclerView.Adapter<MyOrderInnerAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        ListChaoCommodity orderInner = list.get(position);
+        Glide.with(context)
+                .load(orderInner.getImage())
+                .placeholder(R.drawable.ic_loading_rotate)
+                .crossFade()
+                .into(holder.itemMoImg);
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

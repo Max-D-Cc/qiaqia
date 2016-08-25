@@ -1,10 +1,12 @@
 package com.haibin.qiaqia.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by cai on 2016/8/14.
  */
 
-public class Address {
+public class Address implements Serializable {
 
     private int login_id;
     private String name;

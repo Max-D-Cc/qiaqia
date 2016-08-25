@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 public class MyOrderActivity extends BaseActivity {
 
     private final String[] mTitles = new String[]{
-            "全部订单", "代付款", "代收款", "已完成"
+            "待付款", "待收货", "已完成", "退款/售后"
     };
     @BindView(R.id.all_back)
     ImageView allBack;
@@ -94,13 +94,13 @@ public class MyOrderActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return OrderFragment.getInstance("10");
-            } else if (position == 1) {
                 return OrderFragment.getInstance("0");
-            } else if (position == 2) {
+            } else if (position == 1) {
                 return OrderFragment.getInstance("1");
-            } else {
+            } else if (position == 2) {
                 return OrderFragment.getInstance("2");
+            } else {
+                return OrderFragment.getInstance("3");
             }
         }
     }

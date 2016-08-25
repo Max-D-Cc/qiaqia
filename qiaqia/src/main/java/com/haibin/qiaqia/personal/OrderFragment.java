@@ -13,17 +13,21 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseFragment;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
+import com.haibin.qiaqia.entity.OrderType;
+import com.haibin.qiaqia.entity.OrderTypeList;
 import com.haibin.qiaqia.fruitvegetables.DisplayDialog;
 import com.haibin.qiaqia.home.HomeAdapter;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
+import com.haibin.qiaqia.utils.LogUtils;
 import com.haibin.qiaqia.utils.SPUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -45,15 +49,16 @@ public class OrderFragment extends BaseFragment {
     private MyOrderAdapter adapter;
     private RelativeLayout relaFruit;
     private RelativeLayout relaVegetable;
-    public List listOrders = new ArrayList();
-    SubscriberOnNextListener<Goods> SubListener;
-    private String mTitle  = null;
+    public List<OrderType> listOrders = new ArrayList<OrderType>();
+    SubscriberOnNextListener<OrderTypeList> SubListener;
+    private String mTitle = null;
 
     public static OrderFragment getInstance(String title) {
         OrderFragment fft = new OrderFragment();
         fft.mTitle = title;
         return fft;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fruit, container, false);
@@ -62,7 +67,6 @@ public class OrderFragment extends BaseFragment {
         initData();
         return view;
     }
-
 
 
     private void initView() {
@@ -80,11 +84,19 @@ public class OrderFragment extends BaseFragment {
     private void initData() {
         int loginId = (int) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.INFO_ID, 0);
 
-        SubListener = new SubscriberOnNextListener<Goods>() {
+        SubListener = new SubscriberOnNextListener<OrderTypeList>() {
             @Override
-            public void onNext(Goods goodsHttpResult) {
+            public void onNext(OrderTypeList orderTypeList) {
+                if (orderTypeList != null) {
+                    List<OrderType> list_orders = orderTypeList.getList_orders();
+//                    Toast.makeText(getActivity(),"list.size:"+list_orders.size(),Toast.LENGTH_SHORT).show();
+                    LogUtils.e("list.size:",list_orders.size()+"");
+                    listOrders.clear();
+                    listOrders.addAll(list_orders);
+                    adapter.notifyDataSetChanged();
+                }
             }
         };
-        HttpMethods.getInstance().getGoods(new ProgressSubscriber<Goods>(SubListener ,getActivity()), String.valueOf(loginId),mTitle );
+        HttpMethods.getInstance().getOrderList(new ProgressSubscriber<OrderTypeList>(SubListener, getActivity()), String.valueOf(loginId), mTitle);
     }
 }

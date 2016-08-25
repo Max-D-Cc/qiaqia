@@ -27,25 +27,35 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     private List<Address> list;
     private boolean isDelete = false;
     private OnAddressListener listener;
-
+    private OnItemClickListener itemClickListener;
+    private View view;
 
     public AddressAdapter(Context context,List<Address> list) {
         this.context = context;
         this.list = list;
     }
 
+
     public interface OnAddressListener{
         void onUpdateAddress(int position);
+    }
+
+    public interface OnItemClickListener{
+        void itemClick(View v,int postion);
     }
 
     public void setOnAddressListener(OnAddressListener listener){
         this.listener = listener;
     }
 
+    public void setOnItemClickListener(OnItemClickListener itemClickListener){
+        this.itemClickListener = itemClickListener;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_address, null);
+        view = View.inflate(context, R.layout.item_address, null);
         ViewHolder holder = new ViewHolder(view);
+
         return holder;
     }
 
@@ -55,6 +65,16 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
             holder.itemAdrCb.setVisibility(View.VISIBLE);
         }else{
             holder.itemAdrCb.setVisibility(View.GONE);
+        }
+        if (view != null){
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemClickListener != null){
+                        itemClickListener.itemClick(v,position);
+                    }
+                }
+            });
         }
 
         Address address = list.get(position);

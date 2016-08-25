@@ -7,6 +7,7 @@ import com.haibin.qiaqia.entity.CouponList;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.HttpResult;
 import com.haibin.qiaqia.entity.Market;
+import com.haibin.qiaqia.entity.OrderTypeList;
 import com.haibin.qiaqia.entity.User;
 import com.haibin.qiaqia.service.MethodInterface;
 import com.haibin.qiaqia.utils.DateUtils;
@@ -234,6 +235,38 @@ public class HttpMethods {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
         methodInterface.getCouponList(only,login_id)
                 .map(new HttpResultFunc<CouponList>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 提交意见
+     * @param subscriber
+     * @param login_id
+     * @param content
+     */
+    public void getSuggest(Subscriber<String> subscriber, String login_id,String content){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.postSuggest(only,login_id,content)
+                .map(new HttpResultFunc<String>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取订单界面所有信息
+     * @param subscriber
+     * @param login_id
+     * @param status
+     */
+    public void getOrderList(Subscriber<OrderTypeList> subscriber, String login_id, String status){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getOrderInfo(only,login_id,status)
+                .map(new HttpResultFunc<OrderTypeList>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

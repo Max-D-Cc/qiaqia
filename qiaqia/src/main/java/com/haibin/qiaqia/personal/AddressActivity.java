@@ -7,11 +7,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.cart.AddAddressActivity;
+import com.haibin.qiaqia.cart.OrderActivity;
 import com.haibin.qiaqia.entity.Address;
 import com.haibin.qiaqia.entity.AddressList;
 import com.haibin.qiaqia.http.HttpMethods;
@@ -81,6 +83,17 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
                 intent.putExtra("location",address.getPosition());
                 intent.putExtra("type",1);
                 startActivity(intent);
+            }
+        });
+
+        adapter.setOnItemClickListener(new AddressAdapter.OnItemClickListener() {
+            @Override
+            public void itemClick(View v, int postion) {
+                Intent intent = new Intent(AddressActivity.this, OrderActivity.class);
+                Address address = adrList.get(postion);
+                intent.putExtra("address",address);
+                setResult(0,intent);
+                finish();
             }
         });
 

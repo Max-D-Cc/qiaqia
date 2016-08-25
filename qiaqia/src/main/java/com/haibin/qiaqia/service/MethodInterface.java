@@ -8,6 +8,7 @@ import com.haibin.qiaqia.entity.CouponList;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.HttpResult;
 import com.haibin.qiaqia.entity.Market;
+import com.haibin.qiaqia.entity.OrderTypeList;
 import com.haibin.qiaqia.entity.User;
 
 import retrofit2.http.GET;
@@ -98,5 +99,15 @@ public interface MethodInterface {
  */
         @GET("I_coupon_List_Servlet")
         Observable<HttpResult<CouponList>> getCouponList(@Query("only") String only , @Query("login_id") String login_id );
+/**
+ * 建议接口
+ */
+        @POST("I_opinion_Insert_Servlet")
+        Observable<HttpResult<String>> postSuggest(@Query("only") String only , @Query("login_id") String login_id, @Query("content") String content);
+/**
+ * 获取我的订单付款,售后等信息
+ */
+        @GET("I_orders_Type_Servlet")
+        Observable<HttpResult<OrderTypeList>> getOrderInfo(@Query("only") String only , @Query("login_id") String login_id,  @Query("status") String status);
 
 }
