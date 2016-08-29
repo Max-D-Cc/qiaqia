@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseFragment;
+import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
 import com.haibin.qiaqia.fruitvegetables.FruitVegetableActivity;
@@ -26,6 +27,7 @@ import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
 import com.haibin.qiaqia.main.MainActivity;
+import com.haibin.qiaqia.utils.SPUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.lang.ref.WeakReference;
@@ -129,6 +131,12 @@ public class HomeFragment extends BaseFragment {
          relaFruit = (RelativeLayout) header.findViewById(R.id.rela_fruit);
         relaMarket = (RelativeLayout) header.findViewById(R.id.rela_market);
         ButterKnife.bind(this, view);
+
+        String locationCode = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_CODE, "");
+        String loacationName = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_NAME, "");
+        String loacationLon = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LON, "");
+        String loacationLat = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LAT, "");
+        Toast.makeText(getActivity(),"位置：" + loacationName+ "  Lon:" + loacationLat + " Lat:"+ loacationLon,Toast.LENGTH_LONG ).show();
         initView();
         initData();
         return view;

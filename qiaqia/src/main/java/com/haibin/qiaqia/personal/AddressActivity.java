@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,11 +47,13 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
     private List<Address> adrList = new ArrayList<Address>();
     private SubscriberOnNextListener<AddressList> subListener;
     private int clickNum = 0;
+    private int goType;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_address);
         ButterKnife.bind(this);
+        goType = getIntent().getIntExtra("goType", 0);
     }
 
     @Override
@@ -120,7 +123,13 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.adrs_back:
-                finish();
+                if (goType == 0 ){
+                    finish();
+                }else{
+                    Intent intent = new Intent(AddressActivity.this, OrderActivity.class);
+                    setResult(0,intent);
+                    finish();
+                }
                 break;
             case R.id.adrs_addAddress:
                 Intent intent = new Intent();
@@ -180,5 +189,20 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
     public void onStop() {
         super.onStop();
         clickNum = 0;
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == event.KEYCODE_BACK){
+            if (goType == 0){
+                finish();
+            }else{
+                Intent intent = new Intent(AddressActivity.this, OrderActivity.class);
+                setResult(0,intent);
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

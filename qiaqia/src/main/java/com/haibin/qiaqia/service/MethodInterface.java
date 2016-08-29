@@ -3,6 +3,7 @@ package com.haibin.qiaqia.service;
 import com.haibin.qiaqia.entity.Address;
 import com.haibin.qiaqia.entity.AddressList;
 import com.haibin.qiaqia.entity.CategoryGoods;
+import com.haibin.qiaqia.entity.CollectionList;
 import com.haibin.qiaqia.entity.Coupon;
 import com.haibin.qiaqia.entity.CouponList;
 import com.haibin.qiaqia.entity.Goods;
@@ -109,5 +110,9 @@ public interface MethodInterface {
  */
         @GET("I_orders_Type_Servlet")
         Observable<HttpResult<OrderTypeList>> getOrderInfo(@Query("only") String only , @Query("login_id") String login_id,  @Query("status") String status);
-
+/**
+ * 获取我收藏
+ */
+        @GET("I_collection_List_Servlet")
+        Observable<HttpResult<CollectionList>> getCollection(@Query("only") String only , @Query("login_id") String login_id);
 }

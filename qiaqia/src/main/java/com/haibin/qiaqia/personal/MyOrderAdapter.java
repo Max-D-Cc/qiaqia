@@ -28,21 +28,31 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
 
     private Context context;
     private List<OrderType> list;
+    private OnItemClickListener itemClickListener;
+    private View view;
 
     public MyOrderAdapter(Context context, List<OrderType> list) {
         this.context = context;
         this.list = list;
     }
 
+    public interface OnItemClickListener{
+        void itemClick(View view,int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener itemClickListener){
+        this.itemClickListener = itemClickListener;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_myorder, null);
+        view = View.inflate(context, R.layout.item_myorder, null);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         OrderType orderType = list.get(position);
         List<ListChaoCommodity> list_commodity = orderType.getList_commodity();
         MyOrderInnerAdapter adapter = new MyOrderInnerAdapter(context,list_commodity);
@@ -52,6 +62,14 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
         holder.itemMoRv.setItemAnimator(new DefaultItemAnimator());
         holder.itemMoRv.setAdapter(adapter);
         holder.itemMoTime.setText(orderType.getReg_time());
+        holder.itemMoRv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClickListener != null){
+                    itemClickListener.itemClick(holder.itemView,position);
+                }
+            }
+        });
         int status = orderType.getStatus();
         if (status == 0){
             holder.itemMoStatue.setText("代付款");
@@ -71,6 +89,15 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
         }
 
         holder.itemMoMoney.setText("共" + list_commodity.size()+ "件商品  ￥"+String.valueOf(orderType.getSum_money()));
+
+        if (view != null && itemClickListener != null){
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.itemClick(v,position);
+                }
+            });
+        }
     }
 
     @Override

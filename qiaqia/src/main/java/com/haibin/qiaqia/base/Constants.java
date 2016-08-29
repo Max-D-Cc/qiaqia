@@ -92,6 +92,13 @@ public class Constants {
     public static final String IMG_PATH = Environment.getExternalStorageDirectory() + File.separator + "jianguo"+ File.separator;
     public static final String UPDATED_AT = "updatedAt";
 
+    public static final String USER_LOCATION_CODE = "location_code";
+    public static final String USER_LOCATION_NAME = "location_name";
+    public static final String USER_LOCATION_LON = "location_lon";
+    public static final String USER_LOCATION_LAT = "location_lat";
+
+
+
     /*
 
         leancloud消息协议

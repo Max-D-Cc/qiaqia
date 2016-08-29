@@ -2,6 +2,7 @@ package com.haibin.qiaqia.personal;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseFragment;
 import com.haibin.qiaqia.base.Constants;
+import com.haibin.qiaqia.cart.OrderActivity;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
 import com.haibin.qiaqia.entity.OrderType;
@@ -79,6 +81,17 @@ public class OrderFragment extends BaseFragment {
         recyclerviewFruit.setAdapter(adapter);
         //设置Item增加、移除动画
         recyclerviewFruit.setItemAnimator(new DefaultItemAnimator());
+        adapter.setOnItemClickListener(new MyOrderAdapter.OnItemClickListener() {
+            @Override
+            public void itemClick(View view, int position) {
+                List<ListChaoCommodity> goodList = listOrders.get(position).getList_commodity();
+                Goods goods = new Goods();
+                goods.setListChaoCommodity(goodList);
+                Intent intent = new Intent(getActivity(),OrderActivity.class);
+                intent.putExtra("balanceData",goods);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initData() {

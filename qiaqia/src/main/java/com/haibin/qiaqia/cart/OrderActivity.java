@@ -1,6 +1,8 @@
 package com.haibin.qiaqia.cart;
 
 import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,9 @@ import com.haibin.qiaqia.entity.Address;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
 import com.haibin.qiaqia.personal.AddressActivity;
+import com.haibin.qiaqia.utils.ArithUtil;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.BindView;
@@ -72,13 +76,14 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     TextView address;
     @BindView(R.id.activity_order)
     RelativeLayout activityOrder;
+    private List<ListChaoCommodity> listChaoCommodity;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
         Goods goods = (Goods) getIntent().getSerializableExtra("balanceData");
-        List<ListChaoCommodity> listChaoCommodity = goods.getListChaoCommodity();
+        listChaoCommodity = goods.getListChaoCommodity();
 
     }
 
@@ -94,7 +99,34 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void initData() {
+        OrderAdapter adapter = new OrderAdapter(listChaoCommodity);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rcvOrderCart.setLayoutManager(layoutManager);
+        rcvOrderCart.setItemAnimator(new DefaultItemAnimator());
+        rcvOrderCart.setAdapter(adapter);
 
+        double money = countMoney();
+        String sendMoney = tvSendMoney.getText().toString().trim();
+        String tvMoney = sendMoney.substring(1,sendMoney.length()-1);
+        String totalMoney = String.valueOf(money + Integer.parseInt(tvMoney));
+        tvCountMoney.setText("￥"+ totalMoney);
+
+    }
+
+    private double countMoney() {
+        double sumMoney = 0;
+        for (int i = 0; i < listChaoCommodity.size(); i++) {
+            ListChaoCommodity data = listChaoCommodity.get(i);
+            double sum = mul(data.getPrice(), data.getCount());
+            sumMoney = ArithUtil.add(sumMoney, sum);
+        }
+        return sumMoney;
+    }
+
+    public static double mul(double v1, int v2) {
+        BigDecimal b1 = new BigDecimal(Double.toString(v1));
+        BigDecimal b2 = new BigDecimal(Double.toString(v2));
+        return b1.multiply(b2).doubleValue();
     }
 
     @Override
@@ -108,6 +140,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
             case R.id.tv_name:
                 Intent intent = new Intent();
                 intent.setClass(this, AddressActivity.class);
+                intent.putExtra("goType", 1);
                 startActivityForResult(intent, 0);
                 break;
         }
@@ -117,39 +150,58 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 0) {
-            Address address = (Address)data.getSerializableExtra("address");
-            if(address != null){
+            Address address = (Address) data.getSerializableExtra("address");
+            if (address != null) {
                 tvName.setText(address.getName() + " " + address.getPhone() + "\n" + address.getPosition());
             }
         }
     }
 
-    private class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
-
+    class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
         private List<ListChaoCommodity> list;
-        public OrderAdapter(List<ListChaoCommodity> list){
 
+        public OrderAdapter(List<ListChaoCommodity> list) {
+            this.list = list;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+
+            View view = View.inflate(OrderActivity.this, R.layout.item_order, null);
+            ViewHolder holder = new ViewHolder(view);
+            return holder;
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
+            ListChaoCommodity listChaoCommodity = list.get(position);
+            holder.itemOrderName.setText(listChaoCommodity.getName());
+            holder.itemOrderPrice.setText("￥" + mul(listChaoCommodity.getPrice(), listChaoCommodity.getCount()));
+            holder.itemOrderSum.setText(String.valueOf(listChaoCommodity.getCount()));
+        }
 
+        public double mul(double v1, int v2) {
+            BigDecimal b1 = new BigDecimal(Double.toString(v1));
+            BigDecimal b2 = new BigDecimal(Double.toString(v2));
+            return b1.multiply(b2).doubleValue();
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return list.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder{
+        class ViewHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.item_order_name)
+            TextView itemOrderName;
+            @BindView(R.id.item_order_price)
+            TextView itemOrderPrice;
+            @BindView(R.id.item_order_sum)
+            TextView itemOrderSum;
 
             public ViewHolder(View itemView) {
                 super(itemView);
+                ButterKnife.bind(this, itemView);
             }
         }
     }

@@ -3,6 +3,7 @@ package com.haibin.qiaqia.http;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.Address;
 import com.haibin.qiaqia.entity.AddressList;
+import com.haibin.qiaqia.entity.CollectionList;
 import com.haibin.qiaqia.entity.CouponList;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.HttpResult;
@@ -267,6 +268,21 @@ public class HttpMethods {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
         methodInterface.getOrderInfo(only,login_id,status)
                 .map(new HttpResultFunc<OrderTypeList>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取收藏的集合
+     * @param subscriber
+     * @param login_id
+     */
+    public void getCollectionList(Subscriber<CollectionList> subscriber, String login_id){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getCollection(only,login_id)
+                .map(new HttpResultFunc<CollectionList>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
