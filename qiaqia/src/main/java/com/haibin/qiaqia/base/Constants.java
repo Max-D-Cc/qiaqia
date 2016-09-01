@@ -96,6 +96,7 @@ public class Constants {
     public static final String USER_LOCATION_NAME = "location_name";
     public static final String USER_LOCATION_LON = "location_lon";
     public static final String USER_LOCATION_LAT = "location_lat";
+    public static final String USER_LOCATION_ID = "location_id";
 
 
 

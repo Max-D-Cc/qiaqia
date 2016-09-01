@@ -10,6 +10,7 @@ import com.haibin.qiaqia.entity.HttpResult;
 import com.haibin.qiaqia.entity.Market;
 import com.haibin.qiaqia.entity.OrderTypeList;
 import com.haibin.qiaqia.entity.User;
+import com.haibin.qiaqia.entity.VpArea;
 import com.haibin.qiaqia.service.MethodInterface;
 import com.haibin.qiaqia.utils.DateUtils;
 
@@ -115,9 +116,9 @@ public class HttpMethods {
      * @author invinjun
      * created at 2016/6/15 11:30
      */
-    public void getHomeData(Subscriber<Goods> subscriber) {
+    public void getHomeData(Subscriber<Goods> subscriber, String login_id, String area_id) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.getHomeInfo(only)
+        methodInterface.getHomeInfo(only,login_id,area_id)
                 .map(new HttpResultFunc<Goods>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -137,9 +138,9 @@ public class HttpMethods {
     /**
      * 获取超市分类
      */
-    public void getMarketClass(Subscriber<Market> subscriber, String type) {
+    public void getMarketClass(Subscriber<Market> subscriber, String type,String areaid) {
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
-        methodInterface.getMarketClass(only, type)
+        methodInterface.getMarketClass(only, type,areaid)
                 .map(new HttpResultFunc<Market>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -288,4 +289,21 @@ public class HttpMethods {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
+    /**
+     * 获取轮播图还有地区
+     * @param subscriber
+     * @param
+     */
+    public void getVpAreaInfo(Subscriber<VpArea> subscriber, String lon, String lat){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getVpArea(only,lon,lat)
+                .map(new HttpResultFunc<VpArea>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+
 }

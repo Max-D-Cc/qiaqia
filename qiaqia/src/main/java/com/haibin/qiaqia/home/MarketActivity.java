@@ -70,6 +70,7 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener{
 
     @Override
     public void initData() {
+        String areID = (String) SPUtils.getParam(this, Constants.USER_INFO, Constants.USER_LOCATION_ID, "1");
 
         loginId = (int) SPUtils.getParam(MarketActivity.this, Constants.USER_INFO, Constants.INFO_ID, 0);
         GoodsSubListener=new SubscriberOnNextListener<Goods>() {
@@ -90,7 +91,7 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener{
                 adapter.notifyDataSetChanged();
             }
         };
-        HttpMethods.getInstance().getMarketClass(new ProgressSubscriber<Market>(SubListener, this), "0");
+        HttpMethods.getInstance().getMarketClass(new ProgressSubscriber<Market>(SubListener, this), "0",areID);
         HttpMethods.getInstance().getGoods(new ProgressSubscriber<Goods>(GoodsSubListener, this), String.valueOf(loginId),"1");
 
 

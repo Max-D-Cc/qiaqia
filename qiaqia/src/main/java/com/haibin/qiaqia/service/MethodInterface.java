@@ -11,6 +11,7 @@ import com.haibin.qiaqia.entity.HttpResult;
 import com.haibin.qiaqia.entity.Market;
 import com.haibin.qiaqia.entity.OrderTypeList;
 import com.haibin.qiaqia.entity.User;
+import com.haibin.qiaqia.entity.VpArea;
 
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -61,7 +62,7 @@ public interface MethodInterface {
          *首页数据拉取
          */
         @GET("I_chao_commodity_List_Hot_Servlet")
-        Observable<HttpResult<Goods>> getHomeInfo(@Query("only") String only);
+        Observable<HttpResult<Goods>> getHomeInfo(@Query("only") String only,@Query("login_id") String login_id,@Query("area_id") String area_id);
 /**
 <<<<<<< Updated upstream
  * 加减删除购物车商品
@@ -73,7 +74,7 @@ public interface MethodInterface {
  * 超市分类 chao_class_list
  */
         @GET("I_chao_class_List_Id_Servlet")
-        Observable<HttpResult<Market>> getMarketClass(@Query("only") String only,@Query("type") String type);
+        Observable<HttpResult<Market>> getMarketClass(@Query("only") String only,@Query("type") String type,@Query("area_id") String area_id);
 /**
  * 超市修改分类
  */
@@ -115,4 +116,10 @@ public interface MethodInterface {
  */
         @GET("I_collection_List_Servlet")
         Observable<HttpResult<CollectionList>> getCollection(@Query("only") String only , @Query("login_id") String login_id);
+/**
+ * 首页地址加轮播
+ */
+        @GET("I_Area_Banner_Servlet")
+        Observable<HttpResult<VpArea>> getVpArea(@Query("only") String only , @Query("lon") String lon ,@Query("lat") String lat);
+
 }

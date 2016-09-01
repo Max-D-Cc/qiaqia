@@ -95,6 +95,9 @@
         <activity
             android:name=".personal.MyOrderActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".home.WebViewActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
 
         <meta-data

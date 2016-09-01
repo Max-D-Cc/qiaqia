@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,11 +23,14 @@ import com.haibin.qiaqia.base.BaseFragment;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
+import com.haibin.qiaqia.entity.Vp;
+import com.haibin.qiaqia.entity.VpArea;
 import com.haibin.qiaqia.fruitvegetables.FruitVegetableActivity;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
 import com.haibin.qiaqia.main.MainActivity;
+import com.haibin.qiaqia.utils.PicassoLoader;
 import com.haibin.qiaqia.utils.SPUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -36,16 +40,22 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.lightsky.infiniteindicator.InfiniteIndicator;
+import cn.lightsky.infiniteindicator.page.OnPageClickListener;
+import cn.lightsky.infiniteindicator.page.Page;
 import de.greenrobot.event.EventBus;
+
+import static com.amap.api.col.v.i;
 
 /**
  * A simple {@link } subclass.
  */
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements OnPageClickListener, ViewPager.OnPageChangeListener {
     @BindView(R.id.recyclerview)
     XRecyclerView recyclerview;
     @BindView(R.id.market)
     TextView market;
+    private ArrayList<Page> pageViews = new ArrayList<Page>();
 
     private Context context = getActivity();
 
@@ -74,7 +84,35 @@ public class HomeFragment extends BaseFragment {
     private ImageView img_friut;
     private RelativeLayout relaFruit;
     private RelativeLayout relaMarket;
+    private InfiniteIndicator banner;
+    private String loacationLon;
+    private String loacationLat;
+    private List<Vp> vps = new ArrayList<>();
+    private TextView tvCity;
+    private int loginId;
 
+    @Override
+    public void onPageClick(int position, Page page) {
+        Vp vp = vps.get(position);
+        Intent intent = new Intent(getActivity(), WebViewActivity.class);
+        intent.putExtra("html", vp.getUrl());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 
     private class Myhandler extends Handler {
         private WeakReference<Context> reference;
@@ -128,15 +166,17 @@ public class HomeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         header = LayoutInflater.from(getActivity()).inflate(R.layout.header_home, null, false);
         img_friut = (ImageView) header.findViewById(R.id.img_friut);
-         relaFruit = (RelativeLayout) header.findViewById(R.id.rela_fruit);
+        relaFruit = (RelativeLayout) header.findViewById(R.id.rela_fruit);
         relaMarket = (RelativeLayout) header.findViewById(R.id.rela_market);
+        banner = (InfiniteIndicator) header.findViewById(R.id.img_banner);
+        tvCity = (TextView) header.findViewById(R.id.tv_city);
         ButterKnife.bind(this, view);
 
         String locationCode = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_CODE, "");
         String loacationName = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_NAME, "");
-        String loacationLon = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LON, "");
-        String loacationLat = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LAT, "");
-        Toast.makeText(getActivity(),"位置：" + loacationName+ "  Lon:" + loacationLat + " Lat:"+ loacationLon,Toast.LENGTH_LONG ).show();
+        loacationLon = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LON, "");
+        loacationLat = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LAT, "");
+        Toast.makeText(getActivity(), "位置：" + loacationName + "  Lon:" + loacationLat + " Lat:" + loacationLon, Toast.LENGTH_LONG).show();
         initView();
         initData();
         return view;
@@ -156,6 +196,11 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void initData() {
+        loginId = (int) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.INFO_ID, 0);
+        banner.setImageLoader(new PicassoLoader());
+        banner.setPosition(InfiniteIndicator.IndicatorPosition.Center_Bottom);
+        banner.setOnPageChangeListener(this);
+        banner.setInfinite(true);
         relaMarket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,25 +214,58 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
+        SubscriberOnNextListener<VpArea> subscriberOnNextListener = new SubscriberOnNextListener<VpArea>() {
+            @Override
+            public void onNext(VpArea vpArea) {
+                List<Vp> banners = vpArea.getList_t_banner();
+                vps.addAll(banners);
+                initBanner(banners);
+                tvCity.setText(vpArea.getArea_name());
+                initHotData(vpArea.getArea_id());
+            }
+        };
+        HttpMethods.getInstance().getVpAreaInfo(new ProgressSubscriber<VpArea>(subscriberOnNextListener, getActivity()), loacationLon, loacationLat);
+    }
 
+    private void initBanner(List<Vp> banners) {
+        for (int i = 0; i < banners.size(); i++) {
+            pageViews.add(new Page(String.valueOf(banners.get(i).getId()), banners.get(i).getImage(), this));
+        }
+        banner.addPages(pageViews);
+        banner.start();
+
+    }
+
+    private void initHotData(String areaId){
+        SPUtils.setParam(getActivity(),Constants.USER_INFO,Constants.USER_LOCATION_ID,areaId);
         SubListener = new SubscriberOnNextListener<Goods>() {
             @Override
             public void onNext(Goods goodsHttpResult) {
                 listChaoCommodities.addAll(goodsHttpResult.getListChaoCommodity());
                 adapter.notifyDataSetChanged();
-                Toast.makeText(getActivity(), "获取成功", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), "获取成功", Toast.LENGTH_LONG).show();
             }
 
         };
-        HttpMethods.getInstance().getHomeData(new ProgressSubscriber<Goods>(SubListener, getActivity()));
-
+        HttpMethods.getInstance().getHomeData(new ProgressSubscriber<Goods>(SubListener, getActivity()),String.valueOf(loginId),areaId);
     }
-
 
     @Override
     public void onStart() {
         super.onStart();
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        banner.stop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        banner.start();
     }
 
 
@@ -213,6 +291,4 @@ public class HomeFragment extends BaseFragment {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
     }
-
-
 }
