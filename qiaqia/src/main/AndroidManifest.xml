@@ -98,6 +98,12 @@
         <activity
             android:name=".home.WebViewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".home.SerachActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".home.AreaActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
 
         <meta-data

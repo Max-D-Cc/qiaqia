@@ -8,6 +8,7 @@ import com.haibin.qiaqia.entity.CouponList;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.HttpResult;
 import com.haibin.qiaqia.entity.Market;
+import com.haibin.qiaqia.entity.ObjectList;
 import com.haibin.qiaqia.entity.OrderTypeList;
 import com.haibin.qiaqia.entity.User;
 import com.haibin.qiaqia.entity.VpArea;
@@ -305,5 +306,34 @@ public class HttpMethods {
                 .subscribe(subscriber);
     }
 
+    /**
+     * 获取热门搜索数据
+     * @param subscriber
+     */
+    public void getHotDataInfo(Subscriber<ObjectList> subscriber){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getHotData(only)
+                .map(new HttpResultFunc<ObjectList>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 搜索商品
+     * @param subscriber
+     * @param login_id
+     * @param alias
+     */
+    public void getSerachDataInfo(Subscriber<Goods> subscriber,String login_id,String alias){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getSerachData(only,login_id,alias)
+                .map(new HttpResultFunc<Goods>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 
 }

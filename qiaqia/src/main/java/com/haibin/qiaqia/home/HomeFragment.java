@@ -50,7 +50,7 @@ import static com.amap.api.col.v.i;
 /**
  * A simple {@link } subclass.
  */
-public class HomeFragment extends BaseFragment implements OnPageClickListener, ViewPager.OnPageChangeListener {
+public class HomeFragment extends BaseFragment implements OnPageClickListener, ViewPager.OnPageChangeListener,View.OnClickListener {
     @BindView(R.id.recyclerview)
     XRecyclerView recyclerview;
     @BindView(R.id.market)
@@ -90,6 +90,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     private List<Vp> vps = new ArrayList<>();
     private TextView tvCity;
     private int loginId;
+    private ImageView img_search;
 
     @Override
     public void onPageClick(int position, Page page) {
@@ -112,6 +113,18 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_search:
+                startActivity(new Intent(getActivity(),SerachActivity.class));
+                break;
+            case R.id.tv_city:
+                startActivity(new Intent(getActivity(),AreaActivity.class));
+                break;
+        }
     }
 
     private class Myhandler extends Handler {
@@ -141,16 +154,11 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
 //                    DataComplete=true;
                     break;
                 case 1:
-                    //                    String ErrorMessage = (String) msg.obj;
-                    //                    Toast.makeText(mainActivity, ErrorMessage, Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
-//                    cityCategoryBaseBean = (BaseBean<CityCategory>) msg.obj;
-//                    initDrawData(cityCategoryBaseBean);
                     break;
                 case 3:
                     String sms = (String) msg.obj;
-//                    Toast.makeText(mainActivity, sms, Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
@@ -166,6 +174,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         header = LayoutInflater.from(getActivity()).inflate(R.layout.header_home, null, false);
         img_friut = (ImageView) header.findViewById(R.id.img_friut);
+        img_search = (ImageView) header.findViewById(R.id.img_search);
         relaFruit = (RelativeLayout) header.findViewById(R.id.rela_fruit);
         relaMarket = (RelativeLayout) header.findViewById(R.id.rela_market);
         banner = (InfiniteIndicator) header.findViewById(R.id.img_banner);
@@ -177,6 +186,8 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         loacationLon = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LON, "");
         loacationLat = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LAT, "");
         Toast.makeText(getActivity(), "位置：" + loacationName + "  Lon:" + loacationLat + " Lat:" + loacationLon, Toast.LENGTH_LONG).show();
+        img_search.setOnClickListener(this);
+        tvCity.setOnClickListener(this);
         initView();
         initData();
         return view;
