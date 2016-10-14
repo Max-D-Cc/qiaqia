@@ -1,7 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical"
+    >
 
     <include layout="@layout/include_titlebar"/>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/logo_login"
+            android:text="恰恰1.1"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:textColor="@color/textgray"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ao_customer"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/point_img"
+            android:gravity="center_vertical"
+            android:text="恰恰用户协议"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="3dp"
+            android:background="@color/gray_split_color" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:src="@mipmap/jiantou"
+            android:textColor="@color/app_bg" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/point_img"
+            android:gravity="center_vertical"
+            android:text="商务合作"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="3dp"
+            android:background="@color/gray_split_color" />
+
+        <TextView
+            android:id="@+id/ao_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/ao_1"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="400-070-5176"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/blue_btn_bg_color"
+            android:textSize="16dp" />
+
+        <ImageView
+            android:id="@+id/ao_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:src="@mipmap/jiantou"
+            android:textColor="@color/app_bg" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/point_img"
+            android:gravity="center_vertical"
+            android:text="恰恰官网"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="3dp"
+            android:background="@color/gray_split_color" />
+
+        <TextView
+            android:id="@+id/ao_http"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/ao_2"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="www.janguojob.com"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/blue_btn_bg_color"
+            android:textSize="16dp" />
+
+        <ImageView
+            android:id="@+id/ao_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:src="@mipmap/jiantou"
+            android:textColor="@color/app_bg" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ao_loginout"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/point_img"
+            android:gravity="center_vertical"
+            android:text="退出登录"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="3dp"
+            android:background="@color/gray_split_color" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:src="@mipmap/jiantou"
+            android:textColor="@color/app_bg" />
+
+    </RelativeLayout>
 </LinearLayout>

@@ -336,4 +336,38 @@ public class HttpMethods {
                 .subscribe(subscriber);
     }
 
+    /**
+     * 获取推送的信息
+     * @param subscriber
+     * @param login_id
+     */
+    public void getPushDataInfo(Subscriber<ObjectList> subscriber,String login_id){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getPushData(only,login_id)
+                .map(new HttpResultFunc<ObjectList>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 收藏
+     * @param subscriber
+     * @param login_id
+     * @param commiddyId
+     * @param type
+     */
+
+    public void addCoolectionInfo(Subscriber<String> subscriber,String login_id,String commiddyId,String type){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.addCollection(only,login_id,commiddyId,type)
+                .map(new HttpResultFunc<String>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+
 }

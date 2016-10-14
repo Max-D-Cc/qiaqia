@@ -12,6 +12,7 @@ import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.Collection;
 import com.haibin.qiaqia.entity.CollectionList;
+import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.OrderInner;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
@@ -41,6 +42,7 @@ public class CollectionActivity extends BaseActivity {
     private List<Collection> list  = new ArrayList<Collection>();
     private SubscriberOnNextListener<CollectionList> subscriberOnNextListener;
     private CollectionAdapter adapter;
+    private int loginId;
 
     @Override
     public void setContentView() {
@@ -71,7 +73,7 @@ public class CollectionActivity extends BaseActivity {
         collectionRv.setLayoutManager(layoutManager);
         collectionRv.setItemAnimator(new DefaultItemAnimator());
         collectionRv.setAdapter(adapter);
-        int loginId = (int) SPUtils.getParam(this, Constants.USER_INFO, Constants.INFO_ID, 0);
+        loginId = (int) SPUtils.getParam(this, Constants.USER_INFO, Constants.INFO_ID, 0);
         subscriberOnNextListener = new SubscriberOnNextListener<CollectionList>() {
             @Override
             public void onNext(CollectionList collectionList) {
@@ -81,6 +83,38 @@ public class CollectionActivity extends BaseActivity {
             }
         };
         HttpMethods.getInstance().getCollectionList(new ProgressSubscriber<CollectionList>(subscriberOnNextListener,this),String.valueOf(loginId));
+
+        adapter.setOnCollectionListener(new CollectionAdapter.OnCollectionListener() {
+            @Override
+            public void onAdd(int position) {
+                final Collection collection = list.get(position);
+                int commodityid = collection.getCommodity().getId();
+                final int count = collection.getCommodity().getCount();
+                SubscriberOnNextListener SubListener = new SubscriberOnNextListener<Goods>() {
+                    @Override
+                    public void onNext(Goods goodsHttpResult) {
+                        collection.getCommodity().setCount(count + 1);
+                        adapter.notifyDataSetChanged();
+                    }
+                };
+                HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, CollectionActivity.this), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count + 1));
+            }
+
+            @Override
+            public void onJian(int position) {
+                final Collection collection = list.get(position);
+                int commodityid = collection.getCommodity().getId();
+                final int count = collection.getCommodity().getCount();
+                SubscriberOnNextListener SubListener = new SubscriberOnNextListener<Goods>() {
+                    @Override
+                    public void onNext(Goods goodsHttpResult) {
+                        collection.getCommodity().setCount(count - 1);
+                        adapter.notifyDataSetChanged();
+                    }
+                };
+                HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, CollectionActivity.this), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count - 1));
+            }
+        });
     }
 
     @Override

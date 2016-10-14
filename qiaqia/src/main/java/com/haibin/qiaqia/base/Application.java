@@ -3,7 +3,7 @@ package com.haibin.qiaqia.base;
 
 import android.content.Context;
 
-
+import cn.jpush.android.api.JPushInterface;
 
 
 /**
@@ -33,6 +33,8 @@ public class Application extends android.app.Application {
 //        AVIMMessageManager.registerMessageHandler(AVIMTextMessage.class, msgHandler);
 
 //        CrashReport.initCrashReport(getApplicationContext(), "注册时申请的APPID", false);
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     @Override

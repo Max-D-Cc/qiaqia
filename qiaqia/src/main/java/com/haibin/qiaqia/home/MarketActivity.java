@@ -1,17 +1,24 @@
 package com.haibin.qiaqia.home;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.base.Constants;
+import com.haibin.qiaqia.cart.CartActivity;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
 import com.haibin.qiaqia.entity.ListMarket;
 import com.haibin.qiaqia.entity.Market;
+import com.haibin.qiaqia.fruitvegetables.FruitVegetableActivity;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
@@ -28,20 +35,34 @@ import butterknife.ButterKnife;
  * Created by cai on 2016/6/25.
  */
 
-public class MarketActivity extends BaseActivity implements MyItemClickListener{
+public class MarketActivity extends BaseActivity implements MyItemClickListener {
 
     @BindView(R.id.market_rv)
     RecyclerView marketRv;
     @BindView(R.id.recyclerview_goods)
     RecyclerView recyclerview_goods;
+    @BindView(R.id.all_back)
+    ImageView allBack;
+    @BindView(R.id.all_title)
+    TextView allTitle;
+    @BindView(R.id.all_delete)
+    ImageView allDelete;
+    @BindView(R.id.mark_goodsNum)
+    TextView markGoodsNum;
+    @BindView(R.id.mark_gocard)
+    RelativeLayout markGocard;
     private SubscriberOnNextListener<Market> SubListener;
     private SubscriberOnNextListener<Goods> GoodsSubListener;
     private List<ListMarket> list_chao_class;
-    private List<ListChaoCommodity> list_goods_class= new ArrayList<ListChaoCommodity>();
+    private List<ListChaoCommodity> list_goods_class = new ArrayList<ListChaoCommodity>();
     private MarketClassAdapter adapter;
     private MarketGoodsAdapter goodsAdapter;
     private List<ListMarket> marketList = new ArrayList<ListMarket>();
     private int loginId;
+
+    private SubscriberOnNextListener<Goods> subListener;
+    private List<ListChaoCommodity> list = new ArrayList<>();
+    private int goodCount = 0;
 
     @Override
     public void setContentView() {
@@ -51,8 +72,10 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener{
 
     @Override
     public void initViews() {
-        adapter = new MarketClassAdapter(this,marketList,this);
-        goodsAdapter=new MarketGoodsAdapter(this,list_goods_class);
+
+        allTitle.setText("超市");
+        adapter = new MarketClassAdapter(this, marketList, this);
+        goodsAdapter = new MarketGoodsAdapter(this, list_goods_class);
         LinearLayoutManager manage = new LinearLayoutManager(this);
         marketRv.setLayoutManager(manage);
         marketRv.setAdapter(adapter);
@@ -61,11 +84,63 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener{
         recyclerview_goods.setLayoutManager(manage1);
         recyclerview_goods.setAdapter(goodsAdapter);
         recyclerview_goods.setItemAnimator(new DefaultItemAnimator());
+        goodsAdapter.setOnMarkGoodJJClickListener(new MarketGoodsAdapter.OnMarkGoodJJClickListener() {
+            @Override
+            public void onAdd(final int position) {
+                int loginId = (int) SPUtils.getParam(MarketActivity.this, Constants.USER_INFO, Constants.INFO_ID, 0);
+                int commodityid = list_goods_class.get(position).getId();
+//                int count = mdata.getCount();
+                final int count = list_goods_class.get(position).getCount();
+                SubscriberOnNextListener SubListener = new SubscriberOnNextListener<Goods>() {
+                    @Override
+                    public void onNext(Goods goodsHttpResult) {
+//                        Toast.makeText(SerachActivity.this, "添加购物车成功", Toast.LENGTH_SHORT).show();
+                        list_goods_class.get(position).setCount(count + 1);
+                        goodsAdapter.notifyDataSetChanged();
+                        loadGoodsNum();
+                    }
+                };
+                HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, MarketActivity.this), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count + 1));
+
+            }
+
+            @Override
+            public void onReduce(final int position) {
+                final int count = list_goods_class.get(position).getCount();
+                if (count >= 1) {
+                    int loginId = (int) SPUtils.getParam(MarketActivity.this, Constants.USER_INFO, Constants.INFO_ID, 0);
+                    int commodityid = list_goods_class.get(position).getId();
+//                int count = mdata.getCount();
+                    SubscriberOnNextListener SubListener = new SubscriberOnNextListener<Goods>() {
+                        @Override
+                        public void onNext(Goods goodsHttpResult) {
+//                            Toast.makeText(SerachActivity.this, "移除成功", Toast.LENGTH_SHORT).show();
+                            list_goods_class.get(position).setCount(count - 1);
+                            goodsAdapter.notifyDataSetChanged();
+                            loadGoodsNum();
+                        }
+                    };
+                    HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, MarketActivity.this), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count - 1));
+
+                }
+            }
+        });
     }
 
     @Override
     public void initListeners() {
-
+        allBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        markGocard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MarketActivity.this, CartActivity.class));
+            }
+        });
     }
 
     @Override
@@ -73,7 +148,7 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener{
         String areID = (String) SPUtils.getParam(this, Constants.USER_INFO, Constants.USER_LOCATION_ID, "1");
 
         loginId = (int) SPUtils.getParam(MarketActivity.this, Constants.USER_INFO, Constants.INFO_ID, 0);
-        GoodsSubListener=new SubscriberOnNextListener<Goods>() {
+        GoodsSubListener = new SubscriberOnNextListener<Goods>() {
             @Override
             public void onNext(Goods goods) {
 //                Toast.makeText(MarketActivity.this, goods.toString(), Toast.LENGTH_SHORT).show();
@@ -91,9 +166,10 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener{
                 adapter.notifyDataSetChanged();
             }
         };
-        HttpMethods.getInstance().getMarketClass(new ProgressSubscriber<Market>(SubListener, this), "0",areID);
-        HttpMethods.getInstance().getGoods(new ProgressSubscriber<Goods>(GoodsSubListener, this), String.valueOf(loginId),"1");
+        HttpMethods.getInstance().getMarketClass(new ProgressSubscriber<Market>(SubListener, this), "0", areID);
+        HttpMethods.getInstance().getGoods(new ProgressSubscriber<Goods>(GoodsSubListener, this), String.valueOf(loginId), "1");
 
+        loadGoodsNum();
 
     }
 
@@ -104,10 +180,33 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener{
 
     @Override
     public void onItemClick(View view, int position) {
-
-        HttpMethods.getInstance().getGoods(new ProgressSubscriber<Goods>(GoodsSubListener, this), String.valueOf(loginId),marketList.get(position).getClass_id());
+        HttpMethods.getInstance().getGoods(new ProgressSubscriber<Goods>(GoodsSubListener, this), String.valueOf(loginId), String.valueOf(marketList.get(position).getId()));
         adapter.changeSelected(position);
+        adapter.notifyDataSetChanged();
     }
 
+
+
+    private void loadGoodsNum(){
+        loginId = (int) SPUtils.getParam(this, Constants.USER_INFO, Constants.INFO_ID, 0);
+        subListener = new SubscriberOnNextListener<Goods>() {
+            @Override
+            public void onNext(Goods goodsHttpResult) {
+                list.clear();
+                List<ListChaoCommodity> listChaoCommodity = goodsHttpResult.getListChaoCommodity();
+                List<ListChaoCommodity> list_chao_commodityer = goodsHttpResult.getList_chao_commodityer();
+                list.addAll(listChaoCommodity);
+                list.addAll(list_chao_commodityer);
+                goodCount = 0;
+                for (int i = 0; i<list.size(); i++){
+                    ListChaoCommodity listChaoCommodity1 = list.get(i);
+                    int count = listChaoCommodity1.getCount();
+                    goodCount += count;
+                }
+                markGoodsNum.setText(String.valueOf(goodCount));
+            }
+        };
+        HttpMethods.getInstance().getCarInfo(new ProgressSubscriber<Goods>(subListener, this,1), String.valueOf(loginId));
+    }
 
 }

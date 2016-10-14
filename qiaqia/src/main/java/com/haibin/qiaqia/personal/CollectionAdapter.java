@@ -31,6 +31,16 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
 
     private Context context;
     private List<Collection> list;
+    private OnCollectionListener listener;
+
+    public interface OnCollectionListener{
+        void onAdd(int position);
+        void onJian(int position);
+    }
+
+    public void setOnCollectionListener(OnCollectionListener listener){
+        this.listener = listener;
+    }
 
     public CollectionAdapter(Context context, List<Collection> list) {
         this.context = context;
@@ -45,7 +55,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final Collection data = list.get(position);
         holder.tvItemName.setText(data.getCommodity().getName());
         holder.tvColorName.setVisibility(View.GONE);
@@ -60,15 +70,28 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         holder.ivItemAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (listener != null){
+                    listener.onAdd(position);
+                }
             }
         });
         holder.ivItemDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (data.getCommodity().getCount() > 1) {
+                if (listener != null){
+                    listener.onJian(position);
                 }
             }
         });
+
+        if (data.getCommodity().getCount() == 0){
+            holder.tvItemCount.setVisibility(View.GONE);
+            holder.ivItemDown.setVisibility(View.GONE);
+        }else{
+            holder.tvItemCount.setVisibility(View.VISIBLE);
+            holder.ivItemDown.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

@@ -22,13 +22,24 @@ import butterknife.ButterKnife;
 
 public class MarketGoodsAdapter extends RecyclerView.Adapter<MarketGoodsAdapter.ViewHolder> {
 
-
+    private OnMarkGoodJJClickListener listener;
     private Context context;
     private List<ListChaoCommodity> list;
 
     public MarketGoodsAdapter(Context context, List<ListChaoCommodity> list) {
         this.context = context;
         this.list = list;
+    }
+
+    //商品加减
+    public interface OnMarkGoodJJClickListener {
+        void onAdd(int position);
+
+        void onReduce(int position);
+    }
+
+    public void setOnMarkGoodJJClickListener(OnMarkGoodJJClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -40,30 +51,53 @@ public class MarketGoodsAdapter extends RecyclerView.Adapter<MarketGoodsAdapter.
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         ListChaoCommodity listMarket = list.get(position);
-        holder.itemMarketName.setText(listMarket.getName());
+        holder.itemMarkGoodName.setText(listMarket.getName());
         Glide.with(context)
                 .load(listMarket.getImage())
                 .placeholder(R.drawable.ic_loading_rotate)
                 .crossFade()
-                .into(holder.img);
+                .into(holder.itemMarkGoodImg);
+        holder.itemMarkGoodNum.setText(String.valueOf(listMarket.getCount()));
+        holder.itemMarkGoodPrice.setText(String.valueOf(listMarket.getPrice()));
+        holder.itemImgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onAdd(position);
+                }
+            }
+        });
+        holder.itemImgJian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onReduce(position);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        System.out.print("list :" + list.size());
         return list.size();
     }
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.tv_goods_name)
-        TextView itemMarketName;
-        @BindView(R.id.img)
-        ImageView img;
-
+        @BindView(R.id.item_mark_good_img)
+        ImageView itemMarkGoodImg;
+        @BindView(R.id.item_mark_good_name)
+        TextView itemMarkGoodName;
+        @BindView(R.id.item_mark_good_price)
+        TextView itemMarkGoodPrice;
+        @BindView(R.id.item_img_jian)
+        ImageView itemImgJian;
+        @BindView(R.id.item_mark_good_num)
+        TextView itemMarkGoodNum;
+        @BindView(R.id.item_img_add)
+        ImageView itemImgAdd;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

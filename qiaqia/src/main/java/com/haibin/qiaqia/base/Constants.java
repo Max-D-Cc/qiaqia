@@ -30,6 +30,7 @@ public class Constants {
 
     public static final String ONLY_PART1 = "j39dkjhk12934dsn73b";
     public static final String ONLY_PART2 = "kh49032njkd38892nfw";
+    public static final String CARD_ACTION = "qiaqia.update.card";
 
     public static final String GET_SCHOOL= JIANGUO_USING+"T_school_LikeName_Servlet";//学校模糊查询 接口
 
@@ -70,6 +71,9 @@ public class Constants {
     public static final String LOGIN_PHONE="phone";
     public static final String LOGIN_STATUS="status";
     public static final String LOGIN_TYPE="type";//0登录
+    public static final String LOGIN_INFO="loginInfo";//0登录
+    public static final String LOGIN_VERSION="loginVersion";//版本
+    public static final String LOGIN_APK_URL="loginApkUrl";//下载地址
 
     public static final String SP_FIRST="first";//0未点击 1 点击首页 2 点击了编辑界面引导
     public static final String SP_TEL="tel";
@@ -97,6 +101,8 @@ public class Constants {
     public static final String USER_LOCATION_LON = "location_lon";
     public static final String USER_LOCATION_LAT = "location_lat";
     public static final String USER_LOCATION_ID = "location_id";
+
+
 
 
 

@@ -30,12 +30,20 @@ import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseActivity;
+import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.cart.CartFragment;
+import com.haibin.qiaqia.entity.Goods;
+import com.haibin.qiaqia.entity.ListChaoCommodity;
 import com.haibin.qiaqia.entity.TabEntity;
 import com.haibin.qiaqia.home.HomeFragment;
+import com.haibin.qiaqia.http.HttpMethods;
+import com.haibin.qiaqia.http.ProgressSubscriber;
+import com.haibin.qiaqia.http.SubscriberOnNextListener;
 import com.haibin.qiaqia.personal.MineFragment;
 import com.haibin.qiaqia.utils.ActivityManager;
+import com.haibin.qiaqia.utils.CardUtils;
 import com.haibin.qiaqia.utils.LogUtils;
+import com.haibin.qiaqia.utils.SPUtils;
 import com.haibin.qiaqia.widget.SystemBarTintManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
@@ -43,6 +51,7 @@ import com.zhy.http.okhttp.callback.FileCallBack;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,9 +87,16 @@ public class MainActivity extends BaseActivity {
     private ImageView imgeMainLead;
     private int clickTime=0;
     private String apkurl;
+    int goodCount = 0;
 
     int b = 0;
     private RelativeLayout up_dialog;
+    private int loginId;
+    private SubscriberOnNextListener<Goods> subListener;
+    private CardUtils utils;
+
+
+    List<ListChaoCommodity> list = new ArrayList<>();
 
     private static class Myhandler extends Handler {
         private WeakReference<Context> reference;
@@ -330,8 +346,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void tabhost() {
+
         tabHost.setTabData(mTabEntities);
 //        mTabWidget.setIconHeight();
+
+
+
+
         tabHost.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
@@ -425,6 +446,37 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        loginId = (int) SPUtils.getParam(this, Constants.USER_INFO, Constants.INFO_ID, 0);
+        subListener = new SubscriberOnNextListener<Goods>() {
+            @Override
+            public void onNext(Goods goodsHttpResult) {
+                list.clear();
+                List<ListChaoCommodity> listChaoCommodity = goodsHttpResult.getListChaoCommodity();
+                List<ListChaoCommodity> list_chao_commodityer = goodsHttpResult.getList_chao_commodityer();
+                list.addAll(listChaoCommodity);
+                list.addAll(list_chao_commodityer);
+                goodCount = 0;
+                for (int i = 0; i<list.size(); i++){
+                    ListChaoCommodity listChaoCommodity1 = list.get(i);
+                    int count = listChaoCommodity1.getCount();
+                    goodCount += count;
+                }
+                if (goodCount != 0){
+                    tabHost.showMsg(1,goodCount);
+                }
+            }
+        };
+        HttpMethods.getInstance().getCarInfo(new ProgressSubscriber<Goods>(subListener, this,1), String.valueOf(loginId));
+
+
+        utils = new CardUtils(this);
+        utils.setOnIMUpdateListener(new CardUtils.OnCardUpdateListener() {
+            @Override
+            public void onUpdate() {
+                HttpMethods.getInstance().getCarInfo(new ProgressSubscriber<Goods>(subListener, MainActivity.this,1), String.valueOf(loginId));
+            }
+        });
+
     }
 
     @Override
@@ -433,15 +485,15 @@ public class MainActivity extends BaseActivity {
 
 //        timer.schedule(task,2000);
     }
-//    Timer timer = new Timer();
-//    TimerTask task = new TimerTask(){
-//
-//        public void run() {
-//
-//            timer.cancel();
-//        }
 
-//    };
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (utils != null){
+            utils.destoryReceiver();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);

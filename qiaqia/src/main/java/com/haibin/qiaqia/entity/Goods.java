@@ -18,6 +18,17 @@ public class Goods implements Serializable {
     @Expose
     private List<ListChaoCommodity> listChaoCommodity = new ArrayList<ListChaoCommodity>();
 
+    private List<ListChaoCommodity> list_chao_commodityer;
+
+
+    public List<ListChaoCommodity> getList_chao_commodityer() {
+        return list_chao_commodityer;
+    }
+
+    public void setList_chao_commodityer(List<ListChaoCommodity> list_chao_commodityer) {
+        this.list_chao_commodityer = list_chao_commodityer;
+    }
+
     /**
      *
      * @return

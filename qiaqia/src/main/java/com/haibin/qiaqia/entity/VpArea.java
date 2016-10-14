@@ -12,7 +12,10 @@ public class VpArea implements Serializable {
     private String area_id;
     private List<Vp> list_t_banner;
     private String area_name;
+    private String apk_url;
+    private String version;
     private List<Vp> list_area;
+
 
     public String getArea_id() {
         return area_id;
@@ -44,5 +47,21 @@ public class VpArea implements Serializable {
 
     public void setList_area(List<Vp> list_area) {
         this.list_area = list_area;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getApk_url() {
+        return apk_url;
+    }
+
+    public void setApk_url(String apk_url) {
+        this.apk_url = apk_url;
     }
 }

@@ -6,8 +6,18 @@ package com.haibin.qiaqia.entity;
 
 public class ListMarket {
 
+    private int id;
     private String class_id;
     private String name;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getClass_id() {
         return class_id;

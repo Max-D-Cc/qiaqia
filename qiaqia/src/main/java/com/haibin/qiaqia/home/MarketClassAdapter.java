@@ -34,7 +34,7 @@ public class MarketClassAdapter extends RecyclerView.Adapter<MarketClassAdapter.
     public void changeSelected(int positon){ //刷新方法
         if(positon != mSelect){
             mSelect = positon;
-            notifyDataSetChanged();
+//            notifyDataSetChanged();
         }
     }
     @Override
@@ -67,7 +67,6 @@ public class MarketClassAdapter extends RecyclerView.Adapter<MarketClassAdapter.
 
     @Override
     public int getItemCount() {
-        System.out.print("list :" + list.size());
         return list.size();
     }
 

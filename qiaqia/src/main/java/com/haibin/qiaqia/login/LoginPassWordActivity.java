@@ -65,14 +65,14 @@ public class LoginPassWordActivity extends BaseActivity {
             @Override
             public void onNext(User user) {
                 if (user.getCode().equals("200")){
-                    Toast.makeText(LoginPassWordActivity.this,"登录成功",Toast.LENGTH_LONG).show();
+//                    Toast.makeText(LoginPassWordActivity.this,"登录成功",Toast.LENGTH_LONG).show();
                     SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_LOGIN,Constants.LOGIN_PHONE,user.getData().getIUserLogin().getPhone());
+                    SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_INFO,Constants.INFO_IMG,user.getData().getIUserInfo().getNameImage());
+                    SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_INFO,Constants.INFO_NAME,user.getData().getIUserInfo().getName());
                     SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_LOGIN,Constants.LOGIN_PASSWORD,user.getData().getIUserLogin().getPassword());
                     SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_LOGIN,Constants.LOGIN_STATUS,user.getData().getIUserLogin().getStatus());
                     SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_LOGIN,Constants.LOGIN_TYPE,1);
-                    SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_INFO,Constants.INFO_IMG,user.getData().getIUserInfo().getNameImage());
                     SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_INFO,Constants.INFO_ID,user.getData().getIUserInfo().getLoginId());
-                    SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_INFO,Constants.INFO_NAME,user.getData().getIUserInfo().getName());
                     startActivity(new Intent(LoginPassWordActivity.this, MainActivity.class));
                     finish();
                 }else

@@ -11,9 +11,9 @@
         android:layout_height="107dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        >
+        android:weightSum="1">
         <ImageView
-            android:id="@+id/img"
+            android:id="@+id/item_mark_good_img"
             android:layout_width="70dp"
             android:layout_height="68dp"
             android:layout_gravity="center_vertical"
@@ -22,14 +22,15 @@
             android:src="@mipmap/caomei" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="180dp"
             android:layout_height="80dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             >
 
             <TextView
                 android:layout_marginTop="6dp"
-                android:id="@+id/tv_goods_name"
+                android:id="@+id/item_mark_good_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -41,7 +42,7 @@
 
             <TextView
                 android:layout_marginBottom="6dp"
-                android:id="@+id/textView2"
+                android:id="@+id/item_mark_good_price"
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,14 +61,14 @@
                 android:layout_marginBottom="5dp"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:id="@+id/img_jian"
+                    android:id="@+id/item_img_jian"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:padding="3dp"
                     android:src="@mipmap/jianhao_cart" />
                 <TextView
-                    android:id="@+id/item_mark_num"
+                    android:id="@+id/item_mark_good_num"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:text="555"
@@ -75,12 +76,12 @@
                     android:textSize="16sp"
                     android:textColor="@color/textgray"
                     android:gravity="center"
-                    android:layout_toRightOf="@+id/img_jian"
+                    android:layout_toRightOf="@+id/item_img_jian"
                     />
 7
                 <ImageView
-                    android:id="@+id/img_add"
-                    android:layout_toRightOf="@+id/item_mark_num"
+                    android:id="@+id/item_img_add"
+                    android:layout_toRightOf="@+id/item_mark_good_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"

@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/delete"
             android:layout_alignParentRight="true"
+            android:visibility="gone"
             android:layout_marginRight="20.5dp"
             android:padding="5dp"
             android:layout_centerVertical="true"

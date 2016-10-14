@@ -3,47 +3,62 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:background="@color/transparent"
+    android:id="@+id/card_all"
     android:layout_height="wrap_content">
-    <RelativeLayout
-        android:id="@+id/rl_header"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/app_color"
-        android:gravity="center_vertical">
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/back_arrow"
-            android:layout_marginLeft="20dp"
-            android:layout_centerVertical="true"
-            />
-        <TextView
-            android:id="@+id/tv_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="购物车"
-            android:textSize="18.5dp"
-            android:layout_centerInParent="true"
-            />
 
-        <ImageView
-            android:id="@+id/cart_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/delete"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20.5dp"
-            android:layout_centerVertical="true"
-            />
-    </RelativeLayout>
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
+
+    <include
+        android:id="@+id/rl_header"
+        layout="@layout/include_titlebar"
+        />
+    <ScrollView
         android:layout_below="@id/rl_header"
-        android:id="@+id/recyclerview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="51dp"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/card_good1"
+                android:layout_width="match_parent"
+                android:text="选购商品"
+                android:padding="10dp"
+                android:background="@color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="1dp"
+                android:layout_height="wrap_content" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/card_good1"
+                android:id="@+id/recyclerview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"/>
+            <TextView
+                android:id="@+id/card_good2"
+                android:layout_width="match_parent"
+                android:text="代购商品"
+                android:padding="10dp"
+                android:background="@color/white"
+                android:textSize="16sp"
+                android:layout_marginTop="1dp"
+                android:layout_below="@id/recyclerview"
+                android:layout_marginBottom="1dp"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/card_good2"
+                android:id="@+id/recyclerview1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
+        android:id="@+id/cart_bb"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

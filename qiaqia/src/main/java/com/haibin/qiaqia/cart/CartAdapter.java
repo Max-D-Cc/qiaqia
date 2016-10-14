@@ -49,7 +49,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         //减商品
         void minusGoods(int postion);
         //加商品
-        void addGoods(int postion);
+        void addGoods(int postion,ImageView iv);
         //删除商品
         void deleteGoods(int postion,boolean isChecked);
     }
@@ -68,7 +68,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         if (isDelete){
             holder.cart_cb.setVisibility(View.VISIBLE);
@@ -78,7 +78,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         final ListChaoCommodity data = list.get(position);
         holder.tvItemName.setText(data.getName());
-        holder.tvColorName.setText(data.getAlias());
+        holder.tvColorName.setVisibility(View.INVISIBLE);
         holder.tvItemPrice.setText(mul(data.getPrice(), data.getCount()) + "元");
         holder.tvItemCount.setText(String.valueOf(data.getCount()));
         holder.cart_cb.setChecked(false);
@@ -90,13 +90,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.ivItemAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListener.addGoods(position);
+                mOnItemClickListener.addGoods(position,holder.ivItemPic);
             }
         });
         holder.ivItemDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (data.getCount() > 1) {
+                if (mOnItemClickListener != null){
                     mOnItemClickListener.minusGoods(position);
                 }
             }
@@ -104,7 +104,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.cart_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mOnItemClickListener.deleteGoods(position,isChecked);
+                if (mOnItemClickListener != null){
+                    mOnItemClickListener.deleteGoods(position,isChecked);
+                }
             }
         });
 //        holder.itemView.setTag(data);

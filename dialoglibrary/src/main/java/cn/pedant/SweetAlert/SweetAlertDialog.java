@@ -217,6 +217,7 @@ public class SweetAlertDialog extends Dialog implements View.OnClickListener {
                     // initial rotate layout of success mask
                     mSuccessLeftMask.startAnimation(mSuccessLayoutAnimSet.getAnimations().get(0));
                     mSuccessRightMask.startAnimation(mSuccessLayoutAnimSet.getAnimations().get(1));
+                    mConfirmButton.setBackgroundResource(R.drawable.red_button_background);
                     break;
                 case WARNING_TYPE:
                     mConfirmButton.setBackgroundResource(R.drawable.red_button_background);

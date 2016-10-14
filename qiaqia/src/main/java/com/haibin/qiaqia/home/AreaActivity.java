@@ -10,8 +10,12 @@ import android.widget.TextView;
 
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseActivity;
+import com.haibin.qiaqia.entity.Vp;
+import com.haibin.qiaqia.entity.VpArea;
+import com.haibin.qiaqia.utils.SPUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +31,15 @@ public class AreaActivity extends BaseActivity {
     ImageView areaBack;
     @BindView(R.id.area_lv)
     XRecyclerView areaLv;
-    private List<String> areaList = new ArrayList<String>();
+    private List<Vp> areaList = new ArrayList<Vp>();
+    private VpArea vpArea;
+    private AreaAdapter adapter;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_area);
         ButterKnife.bind(this);
+        vpArea = (VpArea) getIntent().getSerializableExtra("area");
     }
 
     @Override
@@ -52,16 +59,28 @@ public class AreaActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        areaList.add("东城区");
-        areaList.add("海淀区");
-        areaList.add("朝阳区");
-        areaList.add("西城区");
-
-        AreaAdapter adapter = new AreaAdapter(areaList);
+        if (vpArea != null){
+            List<Vp> list_area = vpArea.getList_area();
+            areaList.addAll(list_area);
+            adapter = new AreaAdapter(this,areaList);
+        }else{
+            adapter = new AreaAdapter(this,areaList);
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         areaLv.setLayoutManager(layoutManager);
         areaLv.setItemAnimator(new DefaultItemAnimator());
         areaLv.setAdapter(adapter);
+        adapter.setOnAreaClickLisener(new AreaAdapter.OnAreaClickLisener() {
+            @Override
+            public void onClick(int posotion) {
+                Vp vp = areaList.get(posotion);
+                int id = vp.getId();
+                String name = vp.getName();
+                SPUtils.setParam(AreaActivity.this,"area","areaid",String.valueOf(id));
+                SPUtils.setParam(AreaActivity.this,"area","areaname",name);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -69,39 +88,5 @@ public class AreaActivity extends BaseActivity {
 
     }
 
-    class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
 
-
-        private List<String> list;
-
-        public AreaAdapter(List<String> list) {
-            this.list = list;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = View.inflate(AreaActivity.this, R.layout.item_area, null);
-            ViewHolder holder = new ViewHolder(view);
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder,int position) {
-            holder.itemAreaArea.setText(list.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.item_area_area)
-            TextView itemAreaArea;
-            public ViewHolder(View itemView) {
-                super(itemView);
-                ButterKnife.bind(this,itemView);
-            }
-        }
-    }
 }

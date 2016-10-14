@@ -149,4 +149,16 @@ public interface MethodInterface {
      */
     @GET("I_chao_commodity_List_Alias_Servlet")
     Observable<HttpResult<Goods>> getSerachData(@Query("only") String only,@Query("login_id") String login_id,@Query("alias") String alias);
+
+    /**
+     * 推送消息
+     */
+    @GET("I_push_List_Servlet")
+    Observable<HttpResult<ObjectList>> getPushData(@Query("only") String only,@Query("login_id") String login_id);
+
+    /**
+     * 收藏商品
+     */
+    @GET("I_collection_Insert_Servlet")
+    Observable<HttpResult<String>> addCollection(@Query("only") String only,@Query("login_id") String login_id,@Query("commodity_id") String commodity_id,@Query("type") String type);
 }

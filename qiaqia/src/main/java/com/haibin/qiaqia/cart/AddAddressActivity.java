@@ -1,5 +1,6 @@
 package com.haibin.qiaqia.cart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.services.poisearch.PoiSearch;
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.base.Constants;
@@ -18,6 +20,7 @@ import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
 import com.haibin.qiaqia.personal.AddressActivity;
+import com.haibin.qiaqia.personal.NearLocationActivity;
 import com.haibin.qiaqia.utils.LogUtils;
 import com.haibin.qiaqia.utils.SPUtils;
 
@@ -70,6 +73,7 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
     public void initListeners() {
         addadsBack.setOnClickListener(this);
         addadsSave.setOnClickListener(this);
+        etAddress.setOnClickListener(this);
     }
 
     @Override
@@ -94,6 +98,9 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.addads_save:
                 submitAddress();
+                break;
+            case R.id.et_address:
+                startActivity(new Intent(AddAddressActivity.this, NearLocationActivity.class));
                 break;
         }
     }

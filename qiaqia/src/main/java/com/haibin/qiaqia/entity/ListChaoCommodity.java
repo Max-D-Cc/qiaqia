@@ -47,6 +47,33 @@ public class ListChaoCommodity implements Serializable{
     @Expose
     private Integer sum;
 
+    private int hot;
+    private int collection;
+
+    public String getpDate() {
+        return pDate;
+    }
+
+    public void setpDate(String pDate) {
+        this.pDate = pDate;
+    }
+
+    public int getHot() {
+        return hot;
+    }
+
+    public void setHot(int hot) {
+        this.hot = hot;
+    }
+
+    public int getCollection() {
+        return collection;
+    }
+
+    public void setCollection(int collection) {
+        this.collection = collection;
+    }
+
     /**
      *
      * @return

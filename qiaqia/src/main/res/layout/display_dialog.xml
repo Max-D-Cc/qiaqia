@@ -1,61 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/dialog_bg"
-    >
-    <ImageView
-        android:id="@+id/iv_picture"
+    android:layout_height="376dp"
+    android:background="@drawable/dialog_bg">
+
+    <ScrollView
+        android:id="@+id/tv_dl_sv"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@mipmap/yintao"
-        android:scaleType="centerCrop"
-        android:layout_alignParentTop="true"
-        />
-    <TextView
-        android:id="@+id/tv_price"
-        android:layout_below="@id/iv_picture"
-        android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:layout_marginLeft="28.5dp"
-        android:textSize="26.5dp"
-        android:gravity="center_vertical"
-        android:text="￥7.00"
-        />
-    <ImageView
-        android:id="@+id/iv_attention"
-        android:layout_below="@id/iv_picture"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="25.5dp"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@mipmap/qiche2"/>
-    <TextView
-        android:id="@+id/tv_describe"
-        android:layout_below="@id/tv_price"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="25dp"
-        android:layout_height="50dp"
-        android:maxLines="2"
-        android:text="速度来决定了恐惧啊；了疯狂点击；安居房大；到静安寺"
-        />
-    <ImageView
-        android:id="@+id/iv_add"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/tv_describe"
-        android:layout_marginRight="25.5dp"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@mipmap/jiahao_on"/>
-    <ImageView
-        android:id="@+id/iv_open"
-        android:layout_below="@id/iv_add"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:visibility="gone"
-        android:layout_centerInParent="true"
-        android:src="@mipmap/temp"/>
+        android:layout_height="376dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_picture"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/yintao" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="58dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/iv_picture"
+                android:layout_marginLeft="28.5dp"
+                android:gravity="center_vertical"
+                android:text="￥7.00"
+                android:textSize="26.5dp" />
+
+            <ImageView
+                android:id="@+id/iv_attention"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignLeft="@+id/iv_add"
+                android:layout_alignParentRight="true"
+                android:layout_alignStart="@+id/iv_add"
+                android:layout_below="@id/iv_picture"
+                android:layout_marginRight="25.5dp"
+                android:layout_marginTop="10dp"
+                android:padding="8dp"
+                android:src="@mipmap/xin2" />
+
+            <TextView
+                android:id="@+id/tv_describe"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/tv_price"
+                android:layout_marginLeft="25dp"
+                android:maxLines="2"
+                android:text="速度来决定了恐惧啊；了疯狂点击；安居房大；到静安寺" />
 
 
+            <ImageView
+                android:id="@+id/iv_add"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/tv_describe"
+                android:layout_marginRight="25.5dp"
+                android:src="@mipmap/jia_on" />
+
+            <TextView
+                android:id="@+id/tv_buySum"
+                android:layout_width="40dp"
+                android:gravity="center"
+                android:layout_height="35dp"
+                android:layout_below="@+id/tv_describe"
+                android:layout_toLeftOf="@+id/iv_add"
+                android:text="0"
+                android:visibility="gone"
+                android:textColor="@color/textgray"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_jian"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:visibility="gone"
+                android:padding="5dp"
+                android:layout_toLeftOf="@+id/tv_buySum"
+                android:layout_below="@id/tv_describe"
+                android:src="@mipmap/jianhao_on_cart" />
+
+            <ImageView
+                android:id="@+id/iv_open"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_below="@id/iv_add"
+                android:layout_centerHorizontal="true"
+                android:padding="10dp"
+                android:src="@mipmap/jiantouc"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_prodate"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_below="@+id/iv_open"
+                android:layout_marginLeft="28.5dp"
+                android:text="生产日期：20160403"
+                android:textColor="@color/textgray"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_proydate"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_below="@+id/tv_prodate"
+                android:layout_marginLeft="28.5dp"
+                android:text="有效期：6个月"
+                android:textColor="@color/textgray"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

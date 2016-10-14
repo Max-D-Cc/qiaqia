@@ -1,8 +1,11 @@
 package com.haibin.qiaqia.home;
 
 
+import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,13 +13,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseFragment;
@@ -25,6 +31,7 @@ import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
 import com.haibin.qiaqia.entity.Vp;
 import com.haibin.qiaqia.entity.VpArea;
+import com.haibin.qiaqia.fruitvegetables.DisplayDialog;
 import com.haibin.qiaqia.fruitvegetables.FruitVegetableActivity;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
@@ -45,16 +52,14 @@ import cn.lightsky.infiniteindicator.page.OnPageClickListener;
 import cn.lightsky.infiniteindicator.page.Page;
 import de.greenrobot.event.EventBus;
 
-import static com.amap.api.col.v.i;
-
 /**
  * A simple {@link } subclass.
  */
-public class HomeFragment extends BaseFragment implements OnPageClickListener, ViewPager.OnPageChangeListener,View.OnClickListener {
+public class HomeFragment extends BaseFragment implements OnPageClickListener, ViewPager.OnPageChangeListener, View.OnClickListener {
     @BindView(R.id.recyclerview)
     XRecyclerView recyclerview;
-    @BindView(R.id.market)
-    TextView market;
+    @BindView(R.id.rl_top)
+    RelativeLayout rlTop;
     private ArrayList<Page> pageViews = new ArrayList<Page>();
 
     private Context context = getActivity();
@@ -91,6 +96,9 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     private TextView tvCity;
     private int loginId;
     private ImageView img_search;
+    private VpArea areaVp = new VpArea();
+    private int totalDy;
+
 
     @Override
     public void onPageClick(int position, Page page) {
@@ -119,10 +127,12 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_search:
-                startActivity(new Intent(getActivity(),SerachActivity.class));
+                startActivity(new Intent(getActivity(), SerachActivity.class));
                 break;
             case R.id.tv_city:
-                startActivity(new Intent(getActivity(),AreaActivity.class));
+                Intent intent = new Intent(getActivity(), AreaActivity.class);
+                intent.putExtra("area", areaVp);
+                startActivity(intent);
                 break;
         }
     }
@@ -140,18 +150,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
             MainActivity mainActivity = (MainActivity) reference.get();
             switch (msg.what) {
                 case 0:
-//                    if (refreshLayout!=null&&refreshLayout.isRefreshing()) {
-//                        refreshLayout.setRefreshing(false);
-//                    }
-//                    BaseBean<Jobs> jobs = (BaseBean<Jobs>) msg.obj;
-//                    int count = msg.arg1;
-//                    if (count == 0) {
-//                        listChaoCommodities.clear();
-//                    }
-//                    jobs.getData().getList_t_job();
-//                    listChaoCommodities.addAll(jobs.getData().getList_t_job());
-//                    adapter.notifyDataSetChanged();
-//                    DataComplete=true;
+
                     break;
                 case 1:
                     break;
@@ -174,18 +173,17 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         header = LayoutInflater.from(getActivity()).inflate(R.layout.header_home, null, false);
         img_friut = (ImageView) header.findViewById(R.id.img_friut);
-        img_search = (ImageView) header.findViewById(R.id.img_search);
+        img_search = (ImageView) view.findViewById(R.id.img_search);
         relaFruit = (RelativeLayout) header.findViewById(R.id.rela_fruit);
         relaMarket = (RelativeLayout) header.findViewById(R.id.rela_market);
         banner = (InfiniteIndicator) header.findViewById(R.id.img_banner);
-        tvCity = (TextView) header.findViewById(R.id.tv_city);
+        tvCity = (TextView) view.findViewById(R.id.tv_city);
         ButterKnife.bind(this, view);
 
         String locationCode = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_CODE, "");
         String loacationName = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_NAME, "");
         loacationLon = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LON, "");
         loacationLat = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LAT, "");
-        Toast.makeText(getActivity(), "位置：" + loacationName + "  Lon:" + loacationLat + " Lat:" + loacationLon, Toast.LENGTH_LONG).show();
         img_search.setOnClickListener(this);
         tvCity.setOnClickListener(this);
         initView();
@@ -193,6 +191,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         return view;
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void initView() {
         adapter = new HomeAdapter(getActivity(), listChaoCommodities);
         mLayoutManager = new GridLayoutManager(getActivity(), 2);
@@ -204,6 +203,82 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         //设置Item增加、移除动画
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.addHeaderView(header);
+        recyclerview.setPullRefreshEnabled(false);
+        recyclerview.setLoadingMoreEnabled(false);
+        /*recyclerview.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerview.refreshComplete();
+                    }
+                },2000);
+            }
+
+            @Override
+            public void onLoadMore() {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerview.loadMoreComplete();
+                    }
+                },2000);
+            }
+        });*/
+        adapter.setOnItemClickListener(new HomeAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, ListChaoCommodity data) {
+//                Toast.makeText(getActivity(), data.getName(),Toast.LENGTH_SHORT).show();
+                DisplayDialog displayDialog = new DisplayDialog(getActivity(), data, new DisplayDialog.IDisplayDialogEventListener() {
+                    @Override
+                    public void displayDialogEvent(int id) {
+
+                    }
+                }, R.style.alert_dialog);
+                displayDialog.show();
+                setDialogWindowAttr(displayDialog, getActivity());
+            }
+        });
+
+        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+                totalDy = totalDy + dy;
+                int distance = totalDy;
+                if (distance > 0 && distance < 500) {
+                    rlTop.getBackground().mutate().setAlpha(distance / 2);
+                } else if (distance > 500) {
+                    rlTop.getBackground().mutate().setAlpha(255);
+                } else {
+                    rlTop.getBackground().mutate().setAlpha(0);
+                }
+            }
+        });
+
+
+    }
+
+
+    public static void setDialogWindowAttr(Dialog dlg, Context ctx) {
+        Window window = dlg.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = dip2px(ctx, 259);//宽高可设置具体大小
+        lp.height = dip2px(ctx, 365);
+        dlg.getWindow().setAttributes(lp);
+    }
+
+    //常用适配或提示方法
+    public static int dip2px(Context context, float dipValue) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (scale * dipValue + 0.5f);
     }
 
     public void initData() {
@@ -229,6 +304,11 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
             @Override
             public void onNext(VpArea vpArea) {
                 List<Vp> banners = vpArea.getList_t_banner();
+
+
+                SPUtils.setParam(getActivity(), Constants.LOGIN_INFO, Constants.LOGIN_VERSION, Integer.parseInt(vpArea.getVersion()));
+                SPUtils.setParam(getActivity(), Constants.LOGIN_INFO, Constants.LOGIN_APK_URL, vpArea.getApk_url());
+                areaVp = vpArea;
                 vps.addAll(banners);
                 initBanner(banners);
                 tvCity.setText(vpArea.getArea_name());
@@ -247,8 +327,8 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
 
     }
 
-    private void initHotData(String areaId){
-        SPUtils.setParam(getActivity(),Constants.USER_INFO,Constants.USER_LOCATION_ID,areaId);
+    private void initHotData(String areaId) {
+        SPUtils.setParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_ID, areaId);
         SubListener = new SubscriberOnNextListener<Goods>() {
             @Override
             public void onNext(Goods goodsHttpResult) {
@@ -258,13 +338,20 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
             }
 
         };
-        HttpMethods.getInstance().getHomeData(new ProgressSubscriber<Goods>(SubListener, getActivity()),String.valueOf(loginId),areaId);
+        HttpMethods.getInstance().getHomeData(new ProgressSubscriber<Goods>(SubListener, getActivity()), String.valueOf(loginId), areaId);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
+        String id = (String) SPUtils.getParam(getActivity(), "area", "areaid", "");
+        String name = (String) SPUtils.getParam(getActivity(), "area", "areaname", "");
+        if (!id.equals("")) {
+            initHotData(id);
+            tvCity.setText(name);
+        }
+        SPUtils.setParam(getActivity(), "area", "areaname", "");
+        SPUtils.setParam(getActivity(), "area", "areaid", "");
     }
 
     @Override
@@ -283,17 +370,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recyclerview.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                //refresh data here
-            }
 
-            @Override
-            public void onLoadMore() {
-                // load more data here
-            }
-        });
     }
 
 
