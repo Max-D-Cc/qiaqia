@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_add_address"
     android:layout_width="match_parent"
+    android:background="@color/app_bg"
     android:layout_height="match_parent"
     tools:context="com.haibin.qiaqia.cart.AddAddressActivity">
 
@@ -29,6 +30,7 @@
             android:layout_marginLeft="15dp"
             android:padding="5dp"
             android:src="@mipmap/back_arrow" />
+
     </RelativeLayout>
 
     <LinearLayout
@@ -36,6 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@id/top"
+        android:background="@color/white"
+        android:layout_marginBottom="1dp"
         android:orientation="horizontal">
 
         <TextView
@@ -54,8 +58,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/tv_name"
+            android:background="@color/white"
             android:hint="请输入姓名"
-            android:textSize="12dp" />
+            android:textColorHint="@color/textgrayno"
+            android:textSize="14sp"
+            />
 
     </LinearLayout>
 
@@ -90,6 +97,8 @@
         android:id="@+id/rl_phone"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:background="@color/white"
+        android:layout_marginBottom="1dp"
         android:layout_below="@id/rg_sex"
         android:orientation="horizontal">
 
@@ -109,7 +118,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="请输入手机号码，以便快递员联系您"
-            android:textSize="12dp" />
+            android:background="@color/white"
+            android:textColorHint="@color/textgrayno"
+            android:textSize="14sp"  />
 
 
         <TextView
@@ -122,6 +133,8 @@
     <RelativeLayout
         android:id="@+id/rl_address"
         android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_marginBottom="1dp"
         android:layout_height="45dp"
         android:layout_below="@id/rl_phone">
 
@@ -143,10 +156,10 @@
             android:layout_alignParentBottom="true"
             android:background="@color/gray" />
 
-        <EditText
-
+        <TextView
             android:id="@+id/et_address"
             android:layout_width="match_parent"
+            android:gravity="center_vertical"
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/textView3"
             android:layout_marginLeft="8dp"
@@ -154,13 +167,16 @@
             android:layout_toEndOf="@+id/tv_address"
             android:layout_toRightOf="@+id/tv_address"
             android:hint="请输入收货地址"
-            android:textSize="12dp" />
+            android:background="@color/white"
+            android:textColorHint="@color/textgrayno"
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_door"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:background="@color/white"
         android:layout_below="@id/rl_address">
 
         <TextView
@@ -190,7 +206,9 @@
             android:layout_marginStart="8dp"
             android:layout_toRightOf="@+id/tv_door"
             android:hint="例如：1号楼001室"
-            android:textSize="12dp" />
+            android:background="@color/white"
+            android:textColorHint="@color/textgrayno"
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <TextView

@@ -10,12 +10,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -37,6 +39,7 @@ import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
 import com.haibin.qiaqia.main.MainActivity;
+import com.haibin.qiaqia.utils.LogUtils;
 import com.haibin.qiaqia.utils.PicassoLoader;
 import com.haibin.qiaqia.utils.SPUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -98,6 +101,8 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     private ImageView img_search;
     private VpArea areaVp = new VpArea();
     private int totalDy;
+    private String aId;
+    private RelativeLayout relaWm;
 
 
     @Override
@@ -133,6 +138,9 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
                 Intent intent = new Intent(getActivity(), AreaActivity.class);
                 intent.putExtra("area", areaVp);
                 startActivity(intent);
+                break;
+            case R.id.rela_waimai:
+                startActivity(new Intent(getActivity(),WmActivity.class));
                 break;
         }
     }
@@ -176,6 +184,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         img_search = (ImageView) view.findViewById(R.id.img_search);
         relaFruit = (RelativeLayout) header.findViewById(R.id.rela_fruit);
         relaMarket = (RelativeLayout) header.findViewById(R.id.rela_market);
+        relaWm = (RelativeLayout) header.findViewById(R.id.rela_waimai);
         banner = (InfiniteIndicator) header.findViewById(R.id.img_banner);
         tvCity = (TextView) view.findViewById(R.id.tv_city);
         ButterKnife.bind(this, view);
@@ -186,6 +195,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         loacationLat = (String) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.USER_LOCATION_LAT, "");
         img_search.setOnClickListener(this);
         tvCity.setOnClickListener(this);
+        relaWm.setOnClickListener(this);
         initView();
         initData();
         return view;
@@ -193,6 +203,8 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
 
     @TargetApi(Build.VERSION_CODES.M)
     public void initView() {
+
+        loginId = (int) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.INFO_ID, 0);
         adapter = new HomeAdapter(getActivity(), listChaoCommodities);
         mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerview.setHasFixedSize(true);
@@ -200,32 +212,53 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         recyclerview.setLayoutManager(mLayoutManager);
         //设置adapter
         recyclerview.setAdapter(adapter);
+//        adapter.addHeaderView(header);
         //设置Item增加、移除动画
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.addHeaderView(header);
-        recyclerview.setPullRefreshEnabled(false);
+//        recyclerview.setPullRefreshEnabled(false);
         recyclerview.setLoadingMoreEnabled(false);
-        /*recyclerview.setLoadingListener(new XRecyclerView.LoadingListener() {
+        recyclerview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+        /*homeSpl.setColorSchemeColors(getActivity().getResources().getColor(R.color.app_color));
+        homeSpl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mHandler.postDelayed(new Runnable() {
+                SubscriberOnNextListener SubListener1 = new SubscriberOnNextListener<Goods>() {
                     @Override
-                    public void run() {
-                        recyclerview.refreshComplete();
+                    public void onNext(Goods goodsHttpResult) {
+                        listChaoCommodities.clear();
+                        listChaoCommodities.addAll(goodsHttpResult.getListChaoCommodity());
+                        adapter.notifyDataSetChanged();
+                        homeSpl.setRefreshing(false);
+//                recyclerview.refreshComplete();
+//                Toast.makeText(getActivity(), "获取成功", Toast.LENGTH_LONG).show();
                     }
-                },2000);
+                };
+                HttpMethods.getInstance().getHomeData(new ProgressSubscriber<Goods>(SubListener1, getActivity()), String.valueOf(loginId), aId);
+            }
+        });*/
+
+        recyclerview.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                HttpMethods.getInstance().getHomeData(new ProgressSubscriber<Goods>(SubListener, getActivity()), String.valueOf(loginId), aId);
             }
 
             @Override
             public void onLoadMore() {
-                mHandler.postDelayed(new Runnable() {
+             /*   mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         recyclerview.loadMoreComplete();
                     }
-                },2000);
+                },2000);*/
             }
-        });*/
+        });
         adapter.setOnItemClickListener(new HomeAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, ListChaoCommodity data) {
@@ -246,6 +279,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
             }
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -282,7 +316,6 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     }
 
     public void initData() {
-        loginId = (int) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.INFO_ID, 0);
         banner.setImageLoader(new PicassoLoader());
         banner.setPosition(InfiniteIndicator.IndicatorPosition.Center_Bottom);
         banner.setOnPageChangeListener(this);
@@ -304,14 +337,13 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
             @Override
             public void onNext(VpArea vpArea) {
                 List<Vp> banners = vpArea.getList_t_banner();
-
-
                 SPUtils.setParam(getActivity(), Constants.LOGIN_INFO, Constants.LOGIN_VERSION, Integer.parseInt(vpArea.getVersion()));
                 SPUtils.setParam(getActivity(), Constants.LOGIN_INFO, Constants.LOGIN_APK_URL, vpArea.getApk_url());
                 areaVp = vpArea;
                 vps.addAll(banners);
                 initBanner(banners);
                 tvCity.setText(vpArea.getArea_name());
+                aId = vpArea.getArea_id();
                 initHotData(vpArea.getArea_id());
             }
         };
@@ -332,8 +364,10 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
         SubListener = new SubscriberOnNextListener<Goods>() {
             @Override
             public void onNext(Goods goodsHttpResult) {
+                listChaoCommodities.clear();
                 listChaoCommodities.addAll(goodsHttpResult.getListChaoCommodity());
                 adapter.notifyDataSetChanged();
+                recyclerview.refreshComplete();
 //                Toast.makeText(getActivity(), "获取成功", Toast.LENGTH_LONG).show();
             }
 
@@ -344,14 +378,7 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     @Override
     public void onStart() {
         super.onStart();
-        String id = (String) SPUtils.getParam(getActivity(), "area", "areaid", "");
-        String name = (String) SPUtils.getParam(getActivity(), "area", "areaname", "");
-        if (!id.equals("")) {
-            initHotData(id);
-            tvCity.setText(name);
-        }
-        SPUtils.setParam(getActivity(), "area", "areaname", "");
-        SPUtils.setParam(getActivity(), "area", "areaid", "");
+
     }
 
     @Override
@@ -363,6 +390,16 @@ public class HomeFragment extends BaseFragment implements OnPageClickListener, V
     @Override
     public void onResume() {
         super.onResume();
+        String id = (String) SPUtils.getParam(getActivity(), "area", "areaid", "");
+        String name = (String) SPUtils.getParam(getActivity(), "area", "areaname", "");
+        if (!id.equals("")) {
+            LogUtils.e("qiaqia", id + "");
+            aId = id;
+            initHotData(id);
+            tvCity.setText(name);
+        }
+        SPUtils.setParam(getActivity(), "area", "areaname", "");
+        SPUtils.setParam(getActivity(), "area", "areaid", "");
 //        banner.start();
     }
 

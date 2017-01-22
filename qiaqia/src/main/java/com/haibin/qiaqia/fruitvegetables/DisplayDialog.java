@@ -21,6 +21,7 @@ import com.haibin.qiaqia.entity.ListChaoCommodity;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
+import com.haibin.qiaqia.login.LoginPassWordActivity;
 import com.haibin.qiaqia.utils.SPUtils;
 
 import butterknife.BindView;
@@ -55,6 +56,8 @@ public class DisplayDialog extends Dialog {
     TextView tvBuySum;
     @BindView(R.id.iv_jian)
     ImageView ivJian;
+    private int openType = 0; // 1 代表从订单界面打开的
+
 
     private Handler handler = new Handler() {
         @Override
@@ -76,9 +79,11 @@ public class DisplayDialog extends Dialog {
                         if (collection == 1) {
                             ivAttention.setImageResource(R.mipmap.xin2);
                             mdata.setCollection(0);
+                            Toast.makeText(mContext,"取消收藏",Toast.LENGTH_SHORT).show();
                         } else {
                             ivAttention.setImageResource(R.mipmap.xin);
                             mdata.setCollection(1);
+                            Toast.makeText(mContext,"收藏成功",Toast.LENGTH_SHORT).show();
                         }
                     }
                 };
@@ -98,22 +103,28 @@ public class DisplayDialog extends Dialog {
                 });
                 break;
             case R.id.iv_add:
-                int commodityid = mdata.getId();
-                final int count = mdata.getCount();
-                SubListener = new SubscriberOnNextListener<Goods>() {
-                    @Override
-                    public void onNext(Goods goodsHttpResult) {
+                loginId = (int) SPUtils.getParam(mContext, Constants.USER_INFO, Constants.INFO_ID, 0);
+                if (loginId == 0){
+                    Intent intent = new Intent(mContext,LoginPassWordActivity.class);
+                    mContext.startActivity(intent);
+                }else{
+                    int commodityid = mdata.getId();
+                    final int count = mdata.getCount();
+                    SubListener = new SubscriberOnNextListener<Goods>() {
+                        @Override
+                        public void onNext(Goods goodsHttpResult) {
 //                        Toast.makeText(mContext, "添加购物车成功", Toast.LENGTH_SHORT).show();
-                        mdata.setCount(count + 1);
-                        tvBuySum.setVisibility(View.VISIBLE);
-                        ivJian.setVisibility(View.VISIBLE);
-                        tvBuySum.setText(String.valueOf(count + 1));
-                        Intent intent = new Intent(Constants.CARD_ACTION);
-                        mContext.sendBroadcast(intent);
-                        mDisplayDialogEventListener.displayDialogEvent(0);
-                    }
-                };
-                HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, mContext), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count + 1));
+                            mdata.setCount(count + 1);
+                            tvBuySum.setVisibility(View.VISIBLE);
+                            ivJian.setVisibility(View.VISIBLE);
+                            tvBuySum.setText(String.valueOf(count + 1));
+                            Intent intent = new Intent(Constants.CARD_ACTION);
+                            mContext.sendBroadcast(intent);
+                            mDisplayDialogEventListener.displayDialogEvent(0);
+                        }
+                    };
+                    HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, mContext), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count + 1));
+                }
                 break;
             case R.id.iv_jian:
                 int commodityid1 = mdata.getId();
@@ -162,11 +173,19 @@ public class DisplayDialog extends Dialog {
     }
 
     public DisplayDialog(Context context, ListChaoCommodity data, IDisplayDialogEventListener listener, int themeResId) {
-        super(context, R.style.myDialogTheme);
+        super(context,themeResId);
         mContext = context;
         mdata = data;
         mDisplayDialogEventListener = listener;
     }
+    public DisplayDialog(Context context, ListChaoCommodity data, IDisplayDialogEventListener listener, int themeResId,int openType) {
+        super(context, themeResId);
+        mContext = context;
+        mdata = data;
+        mDisplayDialogEventListener = listener;
+        this.openType = openType;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,11 +193,21 @@ public class DisplayDialog extends Dialog {
         View display_dialog = LayoutInflater.from(mContext).inflate(R.layout.display_dialog, null);
         this.setContentView(display_dialog);
         ButterKnife.bind(this, display_dialog);
+
+        if (openType == 1){
+            ivJian.setVisibility(View.GONE);
+            ivAdd.setVisibility(View.GONE);
+            tvBuySum.setVisibility(View.GONE);
+        }else{
+            ivJian.setVisibility(View.VISIBLE);
+            ivAdd.setVisibility(View.VISIBLE);
+            tvBuySum.setVisibility(View.VISIBLE);
+        }
         tvBuySum = (TextView) findViewById(R.id.tv_buySum);
         loginId = (int) SPUtils.getParam(mContext, Constants.USER_INFO, Constants.INFO_ID, 0);
         Glide.with(mContext)
                 .load(mdata.getImage())
-                .placeholder(R.drawable.ic_loading_rotate)
+                .placeholder(R.mipmap.load_big)
                 .crossFade()
                 .into(ivPicture);
         tvPrice.setText("￥" + String.valueOf(mdata.getPrice()));
@@ -197,5 +226,6 @@ public class DisplayDialog extends Dialog {
         } else {
             ivAttention.setImageResource(R.mipmap.xin2);
         }
+
     }
 }

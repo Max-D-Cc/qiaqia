@@ -135,6 +135,14 @@ public class HttpMethods {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+    public void smsLogin(Subscriber<User> subscriber, String phone, String password) {
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.toSmsLogin(only, phone, password)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 
     /**
      * 获取超市分类
@@ -362,6 +370,24 @@ public class HttpMethods {
     public void addCoolectionInfo(Subscriber<String> subscriber,String login_id,String commiddyId,String type){
         String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
         methodInterface.addCollection(only,login_id,commiddyId,type)
+                .map(new HttpResultFunc<String>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 收藏
+     * @param
+     * @param
+     * @param
+     * @param
+     */
+
+    public void getZ(Subscriber<String> subscriber){
+        String only = DateUtils.getDateTimeToOnly(System.currentTimeMillis());
+        methodInterface.getPrivateKey(only)
                 .map(new HttpResultFunc<String>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

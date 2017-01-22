@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <include layout="@layout/include_titlebar"/>
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/push_rv"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

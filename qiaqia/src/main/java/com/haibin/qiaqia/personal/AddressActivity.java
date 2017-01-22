@@ -65,6 +65,7 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
     public void initListeners() {
         adrsAddAddress.setOnClickListener(this);
         adrsBack.setOnClickListener(this);
+        adrsDelete.setVisibility(View.INVISIBLE);
         adrsDelete.setOnClickListener(this);
     }
 
@@ -89,6 +90,7 @@ public class AddressActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
+        adrsRv.setPullRefreshEnabled(false);
         adapter.setOnItemClickListener(new AddressAdapter.OnItemClickListener() {
             @Override
             public void itemClick(View v, int postion) {

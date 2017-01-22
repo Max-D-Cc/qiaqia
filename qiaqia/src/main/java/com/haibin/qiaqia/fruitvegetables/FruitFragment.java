@@ -48,6 +48,7 @@ public class FruitFragment extends BaseFragment {
     public List<ListChaoCommodity> listChaoCommodities = new ArrayList<ListChaoCommodity>();
     SubscriberOnNextListener<Goods> SubListener;
     private String mTitle  = null;
+    private int loginId;
 
     public static FruitFragment getInstance(String title) {
         FruitFragment fft = new FruitFragment();
@@ -66,6 +67,7 @@ public class FruitFragment extends BaseFragment {
 
 
     private void initView() {
+        loginId = (int) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.INFO_ID, 0);
         adapter = new HomeAdapter(getActivity(), listChaoCommodities);
         mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerviewFruit.setHasFixedSize(true);
@@ -74,6 +76,7 @@ public class FruitFragment extends BaseFragment {
         //设置adapter
         recyclerviewFruit.setAdapter(adapter);
         //设置Item增加、移除动画
+        recyclerviewFruit.setLoadingMoreEnabled(false);
         recyclerviewFruit.setItemAnimator(new DefaultItemAnimator());
         adapter.setOnItemClickListener(new HomeAdapter.OnRecyclerViewItemClickListener(){
             @Override
@@ -89,6 +92,18 @@ public class FruitFragment extends BaseFragment {
                 setDialogWindowAttr(displayDialog,getActivity());
             }
         });
+        recyclerviewFruit.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                HttpMethods.getInstance().getGoods(new ProgressSubscriber<Goods>(SubListener ,getActivity()), String.valueOf(loginId),mTitle );
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
+
     }
     public static void setDialogWindowAttr(Dialog dlg, Context ctx){
         Window window = dlg.getWindow();
@@ -104,13 +119,15 @@ public class FruitFragment extends BaseFragment {
         return (int) (scale * dipValue + 0.5f);
     }
     private void initData() {
-        int loginId = (int) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.INFO_ID, 0);
+
 
         SubListener = new SubscriberOnNextListener<Goods>() {
             @Override
             public void onNext(Goods goodsHttpResult) {
+                listChaoCommodities.clear();
                 listChaoCommodities.addAll(goodsHttpResult.getListChaoCommodity());
                 adapter.notifyDataSetChanged();
+                recyclerviewFruit.refreshComplete();
 //                Toast.makeText(getActivity(), "获取成功", Toast.LENGTH_LONG).show();
             }
         };

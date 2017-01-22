@@ -18,7 +18,9 @@
             />
         <TextView
             android:id="@+id/all_title"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
+            android:gravity="center"
+            android:singleLine="true"
             android:layout_height="wrap_content"
             android:text="选择收获地址"
             android:textSize="18.5dp"

@@ -41,7 +41,11 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
     <!-- Optional for location -->
@@ -54,7 +58,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/logo_login"
+        android:icon="@mipmap/app_icon"
         android:label="@string/app_name_qia"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -92,6 +96,9 @@
             android:name=".home.MarketActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
+            android:name=".home.WmActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
             android:name=".fruitvegetables.FruitVegetableActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
@@ -101,6 +108,9 @@
             />
         <activity
             android:name=".personal.AddressActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".personal.DetailsActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".cart.AddAddressActivity"
@@ -138,6 +148,16 @@
         <activity
             android:name=".personal.NearLocationActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".personal.LocationSourceActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".login.MessageLoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".cart.PayActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
 
 
         <meta-data
@@ -241,6 +261,25 @@
         <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
         <!-- Required. AppKey copied from Portal -->
         <meta-data android:name="JPUSH_APPKEY" android:value="83fe69404b99bd4005999bd5"/>
+
+        <!-- 支付宝配置-->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind" >
+        </activity>
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind" >
+        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
 
     </application>
 

@@ -36,6 +36,8 @@ public class MarketGoodsAdapter extends RecyclerView.Adapter<MarketGoodsAdapter.
         void onAdd(int position);
 
         void onReduce(int position);
+
+        void onImgClick(int position);
     }
 
     public void setOnMarkGoodJJClickListener(OnMarkGoodJJClickListener listener) {
@@ -56,10 +58,17 @@ public class MarketGoodsAdapter extends RecyclerView.Adapter<MarketGoodsAdapter.
         holder.itemMarkGoodName.setText(listMarket.getName());
         Glide.with(context)
                 .load(listMarket.getImage())
-                .placeholder(R.drawable.ic_loading_rotate)
+                .placeholder(R.mipmap.load_big)
                 .crossFade()
                 .into(holder.itemMarkGoodImg);
-        holder.itemMarkGoodNum.setText(String.valueOf(listMarket.getCount()));
+        if (listMarket.getCount() == 0){
+            holder.itemMarkGoodNum.setVisibility(View.INVISIBLE);
+            holder.itemImgJian.setVisibility(View.INVISIBLE);
+        }else {
+            holder.itemImgJian.setVisibility(View.VISIBLE);
+            holder.itemMarkGoodNum.setVisibility(View.VISIBLE);
+            holder.itemMarkGoodNum.setText(String.valueOf(listMarket.getCount()));
+        }
         holder.itemMarkGoodPrice.setText(String.valueOf(listMarket.getPrice()));
         holder.itemImgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +83,14 @@ public class MarketGoodsAdapter extends RecyclerView.Adapter<MarketGoodsAdapter.
             public void onClick(View v) {
                 if (listener != null) {
                     listener.onReduce(position);
+                }
+            }
+        });
+        holder.itemMarkGoodImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onImgClick(position);
                 }
             }
         });

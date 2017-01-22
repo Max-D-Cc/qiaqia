@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_titlebar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/pay_yf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:text="实际支付金额：  248" />
+
+        <TextView
+            android:id="@+id/pay_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/pay_yf"
+            android:text="配送时间：  立即配送"
+             />
+        <TextView
+            android:id="@+id/pay_psf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_below="@+id/pay_time"
+            android:text="配送费：  2.5元"
+            />
+        <TextView
+            android:id="@+id/pay_yhq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/pay_psf"
+            android:text="配送费：  1.5元"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/dadaada"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="实际支付金额：" />
+
+        <TextView
+            android:id="@+id/sjzf"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/dadaada"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/red"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="￥20" />
+    </RelativeLayout>
+
+   <!-- <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="选择支付方式：" />
+
+    <RelativeLayout
+        android:id="@+id/pay_weixin"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/pay_img1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/weixin" />
+
+        <TextView
+            android:id="@+id/pay_tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/pay_img1"
+            android:text="微信支付"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pay_tv1"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/pay_img1"
+            android:layout_marginTop="10dp"
+            android:text="推荐安装微信的用户使用"
+            />
+
+        <CheckBox
+            android:id="@+id/pay_cb1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/pay_zfb"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/pay_img2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/zhifubao" />
+
+        <TextView
+            android:id="@+id/pay_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/pay_img2"
+            android:text="支付宝支付"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pay_tv2"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/pay_img2"
+            android:layout_marginTop="10dp"
+            android:text="推荐有支付宝帐号的用户使用"
+            />
+        <CheckBox
+            android:id="@+id/pay_cb2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            />
+    </RelativeLayout>
+-->
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/pay_tabHost"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        tl:tl_tab_padding="7dp"
+        tl:tl_tab_space_equal="true"
+        tl:tl_indicator_color="@color/app_color"
+        app:tl_textSelectColor="@color/app_color"
+        app:tl_textUnselectColor="#000000"
+        tl:tl_indicator_style="NORMAL"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    </com.flyco.tablayout.SlidingTabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pay_Pager"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_above="@+id/tabHost" />
+    <TextView
+        android:id="@+id/pay_sure"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/round_yellowbt"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_toRightOf="@+id/pay_img2"
+        android:text="确认支付"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

@@ -141,7 +141,7 @@ public class UpDialog extends Dialog {
 
                     @Override
                     public void onResponse(File response) {
-
+                        openFile(response);
                     }
                 });
     }
@@ -160,6 +160,7 @@ public class UpDialog extends Dialog {
         intent.setDataAndType(Uri.fromFile(file),
                 "application/vnd.android.package-archive");
         context.startActivity(intent);
+        this.dismiss();
     }
 
 }

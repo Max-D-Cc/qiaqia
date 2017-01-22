@@ -64,7 +64,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         holder.tvItemCount.setText(String.valueOf(data.getCommodity().getCount()));
         Glide.with(context)
                 .load(data.getCommodity().getImage())
-                .placeholder(R.drawable.ic_loading_rotate)
+                .placeholder(R.mipmap.load_big)
                 .crossFade()
                 .into(holder.ivItemPic);
         holder.ivItemAdd.setOnClickListener(new View.OnClickListener() {

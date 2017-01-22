@@ -52,6 +52,8 @@ public class Cart1Adapter extends RecyclerView.Adapter<Cart1Adapter.ViewHolder> 
         void addGoods(int postion, ImageView iv);
         //删除商品
         void deleteGoods(int postion, boolean isChecked);
+
+        void onImgClick(int position);
     }
 
     public Cart1Adapter(Context context, List<ListChaoCommodity> list) {
@@ -79,12 +81,12 @@ public class Cart1Adapter extends RecyclerView.Adapter<Cart1Adapter.ViewHolder> 
         final ListChaoCommodity data = list.get(position);
         holder.tvItemName.setText(data.getName());
         holder.tvColorName.setText(data.getAlias());
-        holder.tvItemPrice.setText(mul(data.getPrice(), data.getCount()) + "元");
+        holder.tvItemPrice.setText(data.getPrice() + "元");
         holder.tvItemCount.setText(String.valueOf(data.getCount()));
         holder.cart_cb.setChecked(false);
         Glide.with(context)
                 .load(data.getImage())
-                .placeholder(R.drawable.ic_loading_rotate)
+                .placeholder(R.mipmap.load_big)
                 .crossFade()
                 .into(holder.ivItemPic);
         holder.ivItemAdd.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +108,15 @@ public class Cart1Adapter extends RecyclerView.Adapter<Cart1Adapter.ViewHolder> 
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (mOnItemClickListener != null){
                     mOnItemClickListener.deleteGoods(position,isChecked);
+                }
+            }
+        });
+
+        holder.ivItemPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null){
+                    mOnItemClickListener.onImgClick(position);
                 }
             }
         });

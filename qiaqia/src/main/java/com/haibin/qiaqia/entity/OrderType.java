@@ -1,12 +1,13 @@
 package com.haibin.qiaqia.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by cai on 2016/8/25.
  */
 
-public class OrderType {
+public class OrderType implements Serializable{
 
     private int id;
     private int login_id;
@@ -21,6 +22,25 @@ public class OrderType {
     private String number;
     private String reg_time;
     private List<ListChaoCommodity> list_commodity;
+    private List<ListChaoCommodity> list_commodityer;
+    private Address address;
+
+
+    public List<ListChaoCommodity> getList_commodityer() {
+        return list_commodityer;
+    }
+
+    public void setList_commodityer(List<ListChaoCommodity> list_commodityer) {
+        this.list_commodityer = list_commodityer;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public int getId() {
         return id;

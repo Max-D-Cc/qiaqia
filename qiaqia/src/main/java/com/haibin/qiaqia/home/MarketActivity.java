@@ -1,11 +1,16 @@
 package com.haibin.qiaqia.home;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,15 +19,19 @@ import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.cart.CartActivity;
+import com.haibin.qiaqia.cart.OrderActivity;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
 import com.haibin.qiaqia.entity.ListMarket;
 import com.haibin.qiaqia.entity.Market;
+import com.haibin.qiaqia.fruitvegetables.DisplayDialog;
 import com.haibin.qiaqia.fruitvegetables.FruitVegetableActivity;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
 import com.haibin.qiaqia.listener.MyItemClickListener;
+import com.haibin.qiaqia.listener.RecyclerItemClickListener;
+import com.haibin.qiaqia.login.LoginPassWordActivity;
 import com.haibin.qiaqia.utils.SPUtils;
 
 import java.util.ArrayList;
@@ -88,19 +97,24 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener 
             @Override
             public void onAdd(final int position) {
                 int loginId = (int) SPUtils.getParam(MarketActivity.this, Constants.USER_INFO, Constants.INFO_ID, 0);
-                int commodityid = list_goods_class.get(position).getId();
+                if (loginId == 0) {
+                    Intent intent = new Intent(MarketActivity.this, LoginPassWordActivity.class);
+                    startActivity(intent);
+                }else{
+                    int commodityid = list_goods_class.get(position).getId();
 //                int count = mdata.getCount();
-                final int count = list_goods_class.get(position).getCount();
-                SubscriberOnNextListener SubListener = new SubscriberOnNextListener<Goods>() {
-                    @Override
-                    public void onNext(Goods goodsHttpResult) {
+                    final int count = list_goods_class.get(position).getCount();
+                    SubscriberOnNextListener SubListener = new SubscriberOnNextListener<Goods>() {
+                        @Override
+                        public void onNext(Goods goodsHttpResult) {
 //                        Toast.makeText(SerachActivity.this, "添加购物车成功", Toast.LENGTH_SHORT).show();
-                        list_goods_class.get(position).setCount(count + 1);
-                        goodsAdapter.notifyDataSetChanged();
-                        loadGoodsNum();
-                    }
-                };
-                HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, MarketActivity.this), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count + 1));
+                            list_goods_class.get(position).setCount(count + 1);
+                            goodsAdapter.notifyDataSetChanged();
+                            loadGoodsNum();
+                        }
+                    };
+                    HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, MarketActivity.this), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count + 1));
+                }
 
             }
 
@@ -124,7 +138,29 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener 
 
                 }
             }
+
+            @Override
+            public void onImgClick(int position) {
+                ListChaoCommodity data = MarketActivity.this.list_goods_class.get(position);
+                DisplayDialog displayDialog = new DisplayDialog(MarketActivity.this, data, new DisplayDialog.IDisplayDialogEventListener() {
+                    @Override
+                    public void displayDialogEvent(int id) {
+
+                    }
+                }, R.style.alert_dialog,1);
+                displayDialog.show();
+                setDialogWindowAttr(displayDialog, MarketActivity.this);
+            }
         });
+    }
+
+    public static void setDialogWindowAttr(Dialog dlg, Context ctx) {
+        Window window = dlg.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = dip2px(ctx, 259);//宽高可设置具体大小
+        lp.height = dip2px(ctx, 365);
+        dlg.getWindow().setAttributes(lp);
     }
 
     @Override
@@ -170,7 +206,6 @@ public class MarketActivity extends BaseActivity implements MyItemClickListener 
         HttpMethods.getInstance().getGoods(new ProgressSubscriber<Goods>(GoodsSubListener, this), String.valueOf(loginId), "1");
 
         loadGoodsNum();
-
     }
 
     @Override

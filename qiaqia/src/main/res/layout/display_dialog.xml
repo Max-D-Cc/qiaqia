@@ -52,7 +52,7 @@
                 android:layout_below="@id/tv_price"
                 android:layout_marginLeft="25dp"
                 android:maxLines="2"
-                android:text="速度来决定了恐惧啊；了疯狂点击；安居房大；到静安寺" />
+                android:text="速度来决定了恐惧啊；'了疯狂点击；安居房大；到静安寺" />
 
 
             <ImageView

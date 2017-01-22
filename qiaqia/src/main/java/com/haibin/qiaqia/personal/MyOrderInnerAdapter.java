@@ -44,7 +44,7 @@ public class MyOrderInnerAdapter extends RecyclerView.Adapter<MyOrderInnerAdapte
         ListChaoCommodity orderInner = list.get(position);
         Glide.with(context)
                 .load(orderInner.getImage())
-                .placeholder(R.drawable.ic_loading_rotate)
+                .placeholder(R.mipmap.load_big)
                 .crossFade()
                 .into(holder.itemMoImg);
     }

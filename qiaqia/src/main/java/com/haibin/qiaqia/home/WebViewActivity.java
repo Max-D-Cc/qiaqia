@@ -1,8 +1,12 @@
 package com.haibin.qiaqia.home;
 
 import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.base.BaseActivity;
@@ -17,6 +21,12 @@ import butterknife.ButterKnife;
 public class WebViewActivity extends BaseActivity {
     @BindView(R.id.web)
     WebView web;
+    @BindView(R.id.all_back)
+    ImageView allBack;
+    @BindView(R.id.all_title)
+    TextView allTitle;
+    @BindView(R.id.all_delete)
+    ImageView allDelete;
     private String htmls;
 
     @Override
@@ -29,12 +39,20 @@ public class WebViewActivity extends BaseActivity {
 
     @Override
     public void initViews() {
+        allTitle.setText("页面详情");
         web.getSettings().setJavaScriptEnabled(true);
-        web.setWebViewClient(new WebViewClient(){
+        web.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return super.shouldOverrideUrlLoading(view, url);
+            }
+        });
+        web.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                allTitle.setText(title);
             }
         });
         web.loadUrl(htmls);
@@ -42,7 +60,12 @@ public class WebViewActivity extends BaseActivity {
 
     @Override
     public void initListeners() {
-
+        allBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

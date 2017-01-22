@@ -9,6 +9,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -44,13 +46,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 //        LogUtils.i("activity",":onResume");
         super.onResume();
 //        MobclickAgent.onResume(this);
+        JPushInterface.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 //        MobclickAgent.onPause(this);
+        JPushInterface.onPause(this);
     }
+
     @Override
     protected void onStop() {
         super.onStop();

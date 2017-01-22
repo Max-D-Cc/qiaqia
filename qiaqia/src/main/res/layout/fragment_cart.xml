@@ -7,12 +7,17 @@
     android:layout_height="wrap_content">
 
 
+
     <include
         android:id="@+id/rl_header"
         layout="@layout/include_titlebar"
         />
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/card_have"
         android:layout_below="@id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="51dp"
@@ -81,6 +86,34 @@
             android:background="@color/app_color"
             android:gravity="center"
             android:text="结算"/>
+    </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/card_null"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="45dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/gouwuche_on"
+            android:layout_marginBottom="15dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_centerInParent="true"
+            android:textColor="@color/textblack"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:text="购物车空空如也，赶紧去挑选商品吧"
+            />
+
     </LinearLayout>
 </RelativeLayout>
 

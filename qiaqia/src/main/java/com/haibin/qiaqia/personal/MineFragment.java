@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.haibin.qiaqia.R;
@@ -20,6 +21,7 @@ import com.haibin.qiaqia.base.BaseFragment;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.login.LoginPassWordActivity;
 import com.haibin.qiaqia.utils.SPUtils;
+import com.haibin.qiaqia.widget.CircleImageView;
 import com.haibin.qiaqia.widget.UpDialog;
 
 import java.io.File;
@@ -55,7 +57,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
     @BindView(R.id.title_bar)
     TextView titleBar;
     @BindView(R.id.img_head)
-    ImageView imgHead;
+    CircleImageView imgHead;
     @BindView(R.id.account)
     RelativeLayout account;
     /*@BindView(R.id.ll_icon)
@@ -136,6 +138,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
 
         version = (int) SPUtils.getParam(getActivity(), Constants.LOGIN_INFO, Constants.LOGIN_VERSION, 0);
         apkurl = (String) SPUtils.getParam(getActivity(), Constants.LOGIN_INFO, Constants.LOGIN_APK_URL, "");
+//        apkurl = "http://www.e-zhuan.com/app/ezhuan.apk";
         ininView();
         return view;
     }
@@ -257,37 +260,59 @@ public class MineFragment extends BaseFragment implements View.OnClickListener{
         }else {
             switch (v.getId()){
                 case R.id.credit:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent.putExtra("loginType",1);
+                    startActivity(intent);
                     break;
                 case R.id.ll_guanli:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent1 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent1.putExtra("loginType",1);
+                    startActivity(intent1);
                     break;
                 case R.id.ll_collect:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent2 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent2.putExtra("loginType",1);
+                    startActivity(intent2);
                     break;
                 case R.id.rl_feedback:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent3 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent3.putExtra("loginType",1);
+                    startActivity(intent3);
                     break;
                 case R.id.rl_updata:
-                    startActivity(new Intent(getActivity(),PushActivity.class));
+                    Intent intent4 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent4.putExtra("loginType",1);
+                    startActivity(intent4);
                     break;
                 case R.id.about:
-                    startActivity(new Intent(getActivity(),AboutOursActivity.class));
+                    Intent intent5 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent5.putExtra("loginType",1);
+                    startActivity(intent5);
                     break;
                 case R.id.tv_wait_pay:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent6 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent6.putExtra("loginType",1);
+                    startActivity(intent6);
                     break;
                 case R.id.tv_wait_get:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent7 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent7.putExtra("loginType",1);
+                    startActivity(intent7);
                     break;
                 case R.id.tv_finish:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent8 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent8.putExtra("loginType",1);
+                    startActivity(intent8);
                     break;
                 case R.id.tv_after_salas:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent9 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent9.putExtra("loginType",1);
+                    startActivity(intent9);
                     break;
                 case R.id.account:
-                    startActivity(new Intent(getActivity(),LoginPassWordActivity.class));
+                    Intent intent11 = new Intent(getActivity(),LoginPassWordActivity.class);
+                    intent11.putExtra("loginType",1);
+                    startActivity(intent11);
                     break;
             }
         }

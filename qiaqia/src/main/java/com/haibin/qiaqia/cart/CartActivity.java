@@ -2,6 +2,7 @@ package com.haibin.qiaqia.cart;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,7 +13,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,10 +27,12 @@ import com.haibin.qiaqia.base.BaseFragment;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
+import com.haibin.qiaqia.fruitvegetables.DisplayDialog;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
 import com.haibin.qiaqia.listener.RecyclerItemClickListener;
+import com.haibin.qiaqia.login.LoginPassWordActivity;
 import com.haibin.qiaqia.utils.ArithUtil;
 import com.haibin.qiaqia.utils.LogUtils;
 import com.haibin.qiaqia.utils.SPUtils;
@@ -63,6 +69,11 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
     ImageView allBack;
     @BindView(R.id.all_title)
     TextView allTitle;
+    @BindView(R.id.card_have)
+    RelativeLayout cardHave;
+    @BindView(R.id.card_null)
+    LinearLayout cardNull;
+
     private CartAdapter adapter;
     private LinearLayoutManager mLayoutManager;
     public List<ListChaoCommodity> listChaoCommodities = new ArrayList<ListChaoCommodity>();
@@ -74,6 +85,7 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
     private int clickNum = 0;
     private int loginId;
     private Cart1Adapter adapter1;
+    private int loginType;
 
 
     @Override
@@ -86,6 +98,7 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initViews() {
+        loginType = (int) SPUtils.getParam(this, Constants.USER_LOGIN, Constants.LOGIN_TYPE, 0);
         allTitle.setText("购物车");
         adapter = new CartAdapter(CartActivity.this, listChaoCommodities);
         mLayoutManager = new LinearLayoutManager(CartActivity.this);
@@ -150,6 +163,19 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
                     }
                 }
             }
+
+            @Override
+            public void onImgClick(int position) {
+                ListChaoCommodity data = listChaoCommodities.get(position);
+                DisplayDialog displayDialog = new DisplayDialog(CartActivity.this, data, new DisplayDialog.IDisplayDialogEventListener() {
+                    @Override
+                    public void displayDialogEvent(int id) {
+
+                    }
+                }, R.style.alert_dialog,1);
+                displayDialog.show();
+                setDialogWindowAttr(displayDialog, CartActivity.this);
+            }
         });
 
         adapter1 = new Cart1Adapter(CartActivity.this,listChaoCommodities1);
@@ -211,6 +237,19 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
                     }
                 }
             }
+
+            @Override
+            public void onImgClick(int position) {
+                ListChaoCommodity data = listChaoCommodities1.get(position);
+                DisplayDialog displayDialog = new DisplayDialog(CartActivity.this, data, new DisplayDialog.IDisplayDialogEventListener() {
+                    @Override
+                    public void displayDialogEvent(int id) {
+
+                    }
+                }, R.style.alert_dialog,1);
+                displayDialog.show();
+                setDialogWindowAttr(displayDialog, CartActivity.this);
+            }
         });
 
 
@@ -224,6 +263,7 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
                 listChaoCommodities1.addAll(goodsHttpResult.getList_chao_commodityer());
                 adapter.notifyDataSetChanged();
                 adapter1.notifyDataSetChanged();
+                refreshUI();
                 setCountMoney();
 //                Toast.makeText(CartActivity.this, "获取成功", Toast.LENGTH_LONG).show();
             }
@@ -252,14 +292,24 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
             public void onItemLongClick(View view, int position) {
 //                int id = listChaoCommodities.get(position).getId();
 //                Toast.makeText(CartActivity.this,"postion: " + position,Toast.LENGTH_SHORT).show();
-//                deleteDialog(listChaoCommodities1.get(position).getId(),position,1);
+                deleteDialog(listChaoCommodities1.get(position).getId(),position,1);
             }
         }));
     }
 
+    public static void setDialogWindowAttr(Dialog dlg, Context ctx) {
+        Window window = dlg.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = dip2px(ctx, 259);//宽高可设置具体大小
+        lp.height = dip2px(ctx, 365);
+        dlg.getWindow().setAttributes(lp);
+    }
+
+
     @Override
     public void initListeners() {
-
+        allBack.setOnClickListener(this);
     }
 
     @Override
@@ -291,8 +341,16 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cart_submit:
+                if (loginType == 0){
+                    startActivity(new Intent(this, LoginPassWordActivity.class));
+                }
+                if (listChaoCommodities.size() == 0 && listChaoCommodities1.size() == 0){
+                    Toast.makeText(this,"对不起，您还有选购任何商品",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Goods goods = new Goods();
                 goods.setListChaoCommodity(listChaoCommodities);
+                goods.setList_chao_commodityer(listChaoCommodities1);
                 Intent intent = new Intent(CartActivity.this, OrderActivity.class);
                 intent.putExtra("balanceData", goods);
                 startActivity(intent);
@@ -320,6 +378,7 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
                             refreshAdapter();
                             Intent intent = new Intent(Constants.CARD_ACTION);
                             CartActivity.this.sendBroadcast(intent);
+                            refreshUI();
                         }
                     };
                     HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, CartActivity.this), String.valueOf(loginId), String.valueOf(id), String.valueOf(0));
@@ -331,6 +390,7 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
                             listChaoCommodities1.clear();
                             listChaoCommodities1.addAll(listChaoCommodity);
                             refreshAdapter();
+                            refreshUI();
                             Intent intent = new Intent(Constants.CARD_ACTION);
                             CartActivity.this.sendBroadcast(intent);
                         }
@@ -390,6 +450,27 @@ public class CartActivity extends BaseActivity implements View.OnClickListener {
     public void onStop() {
         super.onStop();
         clickNum = 0;
+    }
+    private void refreshUI(){
+        if (listChaoCommodities.size() == 0 && listChaoCommodities1.size() == 0){
+            cardHave.setVisibility(View.GONE);
+            cardNull.setVisibility(View.VISIBLE);
+        }else if(listChaoCommodities.size() != 0 && listChaoCommodities1.size() == 0){
+            cardGood1.setVisibility(View.VISIBLE);
+            cardGood2.setVisibility(View.GONE);
+            cardHave.setVisibility(View.VISIBLE);
+            cardNull.setVisibility(View.GONE);
+        }else if(listChaoCommodities.size() == 0 && listChaoCommodities1.size() != 0){
+            cardGood1.setVisibility(View.GONE);
+            cardGood2.setVisibility(View.VISIBLE);
+            cardHave.setVisibility(View.VISIBLE);
+            cardNull.setVisibility(View.GONE);
+        }else{
+            cardGood1.setVisibility(View.VISIBLE);
+            cardGood2.setVisibility(View.VISIBLE);
+            cardHave.setVisibility(View.VISIBLE);
+            cardNull.setVisibility(View.GONE);
+        }
     }
 
 }

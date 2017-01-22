@@ -20,6 +20,7 @@ import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
 import com.haibin.qiaqia.personal.AddressActivity;
+import com.haibin.qiaqia.personal.LocationSourceActivity;
 import com.haibin.qiaqia.personal.NearLocationActivity;
 import com.haibin.qiaqia.utils.LogUtils;
 import com.haibin.qiaqia.utils.SPUtils;
@@ -41,7 +42,7 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
     @BindView(R.id.et_phone)
     EditText etPhone;
     @BindView(R.id.et_address)
-    EditText etAddress;
+    TextView etAddress;
     @BindView(R.id.et_door)
     EditText etDoor;
     @BindView(R.id.addads_save)
@@ -100,8 +101,20 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
                 submitAddress();
                 break;
             case R.id.et_address:
-                startActivity(new Intent(AddAddressActivity.this, NearLocationActivity.class));
+                Intent intent = new Intent(AddAddressActivity.this, LocationSourceActivity.class);
+                startActivityForResult(intent,0);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 0) {
+            String address = (String) data.getSerializableExtra("adname");
+            if (address != null) {
+                etAddress.setText(address);
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.haibin.qiaqia.cart;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,7 +13,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +26,8 @@ import com.haibin.qiaqia.base.BaseFragment;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.Goods;
 import com.haibin.qiaqia.entity.ListChaoCommodity;
+import com.haibin.qiaqia.fruitvegetables.DisplayDialog;
+import com.haibin.qiaqia.home.MarketActivity;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
@@ -29,7 +35,6 @@ import com.haibin.qiaqia.listener.RecyclerItemClickListener;
 import com.haibin.qiaqia.utils.ArithUtil;
 import com.haibin.qiaqia.utils.LogUtils;
 import com.haibin.qiaqia.utils.SPUtils;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -62,6 +67,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     ImageView allBack;
     @BindView(R.id.all_title)
     TextView allTitle;
+    @BindView(R.id.card_have)
+    RelativeLayout cardHave;
+    @BindView(R.id.card_null)
+    LinearLayout cardNull;
     private CartAdapter adapter;
     private LinearLayoutManager mLayoutManager;
     public List<ListChaoCommodity> listChaoCommodities = new ArrayList<ListChaoCommodity>();
@@ -151,6 +160,19 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }
             }
+
+            @Override
+            public void onImgClick(int position) {
+                ListChaoCommodity data = listChaoCommodities.get(position);
+                DisplayDialog displayDialog = new DisplayDialog(getActivity(), data, new DisplayDialog.IDisplayDialogEventListener() {
+                    @Override
+                    public void displayDialogEvent(int id) {
+
+                    }
+                }, R.style.alert_dialog,1);
+                displayDialog.show();
+                setDialogWindowAttr(displayDialog, getActivity());
+            }
         });
 
         adapter1 = new Cart1Adapter(getActivity(), listChaoCommodities1);
@@ -212,6 +234,19 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }
             }
+
+            @Override
+            public void onImgClick(int position) {
+                ListChaoCommodity data = listChaoCommodities1.get(position);
+                DisplayDialog displayDialog = new DisplayDialog(getActivity(), data, new DisplayDialog.IDisplayDialogEventListener() {
+                    @Override
+                    public void displayDialogEvent(int id) {
+
+                    }
+                }, R.style.alert_dialog,1);
+                displayDialog.show();
+                setDialogWindowAttr(displayDialog, getActivity());
+            }
         });
 
 
@@ -225,6 +260,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                 listChaoCommodities1.addAll(goodsHttpResult.getList_chao_commodityer());
                 adapter.notifyDataSetChanged();
                 adapter1.notifyDataSetChanged();
+                LogUtils.e("cai","zou l fangfa");
+                refreshUI();
                 setCountMoney();
 //                Toast.makeText(getActivity(), "获取成功", Toast.LENGTH_LONG).show();
             }
@@ -254,8 +291,24 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 //                int id = listChaoCommodities.get(position).getId();
 //                Toast.makeText(getActivity(),"postion: " + position,Toast.LENGTH_SHORT).show();
 //                deleteDialog(listChaoCommodities1.get(position).getId(),position,1);
+                deleteDialog(listChaoCommodities1.get(position).getId(), position, 1);
             }
         }));
+    }
+
+    public static void setDialogWindowAttr(Dialog dlg, Context ctx) {
+        Window window = dlg.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.CENTER;
+        lp.width = dip2px(ctx, 259);//宽高可设置具体大小
+        lp.height = dip2px(ctx, 365);
+        dlg.getWindow().setAttributes(lp);
+    }
+
+    //常用适配或提示方法
+    public static int dip2px(Context context, float dipValue) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (scale * dipValue + 0.5f);
     }
 
     public void initData() {
@@ -266,6 +319,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (getUserVisibleHint()) {
+            loginId = (int) SPUtils.getParam(getActivity(), Constants.USER_INFO, Constants.INFO_ID, 0);
             HttpMethods.getInstance().getCarInfo(new ProgressSubscriber<Goods>(SubListener, getActivity()), String.valueOf(loginId));
             LogUtils.e("TAG----------TAG: ", "可见");
         } else {
@@ -292,8 +346,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cart_submit:
+                if (listChaoCommodities.size() == 0 && listChaoCommodities1.size() == 0){
+                    Toast.makeText(getActivity(),"对不起，您还有选购任何商品",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Goods goods = new Goods();
                 goods.setListChaoCommodity(listChaoCommodities);
+                goods.setList_chao_commodityer(listChaoCommodities1);
                 Intent intent = new Intent(getActivity(), OrderActivity.class);
                 intent.putExtra("balanceData", goods);
                 startActivity(intent);
@@ -318,6 +377,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                             refreshAdapter();
                             Intent intent = new Intent(Constants.CARD_ACTION);
                             getActivity().sendBroadcast(intent);
+                            refreshUI();
                         }
                     };
                     HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, getActivity()), String.valueOf(loginId), String.valueOf(id), String.valueOf(0));
@@ -331,6 +391,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                             refreshAdapter();
                             Intent intent = new Intent(Constants.CARD_ACTION);
                             getActivity().sendBroadcast(intent);
+                            refreshUI();
                         }
                     };
                     HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, getActivity()), String.valueOf(loginId), String.valueOf(id), String.valueOf(0));
@@ -388,5 +449,32 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     public void onStop() {
         super.onStop();
         clickNum = 0;
+    }
+
+    private void refreshUI(){
+        LogUtils.e("cai","zou l fangfa1");
+        if (listChaoCommodities.size() == 0 && listChaoCommodities1.size() == 0){
+            cardHave.setVisibility(View.GONE);
+            cardNull.setVisibility(View.VISIBLE);
+            LogUtils.e("cai","zou l fangfa2");
+        }else if(listChaoCommodities.size() != 0 && listChaoCommodities1.size() == 0){
+            cardGood1.setVisibility(View.VISIBLE);
+            cardGood2.setVisibility(View.GONE);
+            cardHave.setVisibility(View.VISIBLE);
+            cardNull.setVisibility(View.GONE);
+            LogUtils.e("cai","zou l fangfa3");
+        }else if(listChaoCommodities.size() == 0 && listChaoCommodities1.size() != 0){
+            cardGood1.setVisibility(View.GONE);
+            cardGood2.setVisibility(View.VISIBLE);
+            cardHave.setVisibility(View.VISIBLE);
+            cardNull.setVisibility(View.GONE);
+            LogUtils.e("cai","zou l fangfa4");
+        }else{
+            cardGood1.setVisibility(View.VISIBLE);
+            cardGood2.setVisibility(View.VISIBLE);
+            cardHave.setVisibility(View.VISIBLE);
+            cardNull.setVisibility(View.GONE);
+            LogUtils.e("cai","zou l fangfa5");
+        }
     }
 }

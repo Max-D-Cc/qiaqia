@@ -39,8 +39,10 @@ public class PushAdapter extends RecyclerView.Adapter<PushAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Push push = list.get(position);
-        holder.itemPushContent.setText("消息提示："+push.getContent());
+        holder.itemPushTitle.setText(push.getTitle());
+        holder.itemPushContent.setText(push.getContent());
         holder.itemPushTime.setText(push.getTime());
+        holder.itemPushPoint.setText(push.getPoint());
     }
 
     @Override
@@ -52,6 +54,10 @@ public class PushAdapter extends RecyclerView.Adapter<PushAdapter.ViewHolder> {
 
         @BindView(R.id.item_push_time)
         TextView itemPushTime;
+        @BindView(R.id.item_push_point)
+        TextView itemPushPoint;
+        @BindView(R.id.item_push_title)
+        TextView itemPushTitle;
         @BindView(R.id.item_push_content)
         TextView itemPushContent;
         public ViewHolder(View itemView) {

@@ -40,6 +40,12 @@ public interface MethodInterface {
     Observable<User> toLogin(@Query("only") String only, @Query("phone") String phone, @Query("password") String password);
 
     /**
+     * 短信登陆
+     */
+    @GET("I_user_login_SMS_Servlet")
+    Observable<User> toSmsLogin(@Query("only") String only, @Query("phone") String phone, @Query("sms_code") String sms_code);
+
+    /**
      * 超市查看分类
      */
     @GET("I_chao_class_Select_Servlet")
@@ -161,4 +167,17 @@ public interface MethodInterface {
      */
     @GET("I_collection_Insert_Servlet")
     Observable<HttpResult<String>> addCollection(@Query("only") String only,@Query("login_id") String login_id,@Query("commodity_id") String commodity_id,@Query("type") String type);
+
+    /**
+     * z
+     */
+    @GET("I_Alipay_key_Servlet")
+    Observable<HttpResult<String>> getPrivateKey(@Query("only") String only);
+
+
+    /**
+     * submit order
+     */
+   /* @GET("I_orders_Insert_Servlet")
+    Observable<HttpResult<String>> getPrivateKey(@Query("only") String only);*/
 }

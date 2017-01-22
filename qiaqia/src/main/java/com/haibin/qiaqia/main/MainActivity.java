@@ -29,6 +29,7 @@ import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.haibin.qiaqia.R;
+import com.haibin.qiaqia.base.Application;
 import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.cart.CartFragment;
@@ -94,7 +95,7 @@ public class MainActivity extends BaseActivity {
     private int loginId;
     private SubscriberOnNextListener<Goods> subListener;
     private CardUtils utils;
-
+    public static MainActivity instance = null;
 
     List<ListChaoCommodity> list = new ArrayList<>();
 
@@ -142,6 +143,8 @@ public class MainActivity extends BaseActivity {
 //          loadingView = (CircleLoadingView) findViewById(R.id.loading);
         ButterKnife.bind(this);
         initSystemBar(this);
+        instance = this;
+        Application.getInstance().addActivity(this);
 //        button = (ArrowDownloadButton)findViewById(R.id.arrow_download_button);
 //        up_dialog= (RelativeLayout) findViewById(R.id.up_dialog);
 //        int version = (int) SPUtils.getParam(MainActivity.this, Constants.LOGIN_INFO, Constants.LOGIN_VERSION, 0);
@@ -463,6 +466,8 @@ public class MainActivity extends BaseActivity {
                 }
                 if (goodCount != 0){
                     tabHost.showMsg(1,goodCount);
+                }else{
+                    tabHost.hideMsg(1);
                 }
             }
         };

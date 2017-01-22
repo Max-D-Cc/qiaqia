@@ -2,6 +2,7 @@ package com.haibin.qiaqia.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haibin.qiaqia.R;
+import com.haibin.qiaqia.base.Application;
 import com.haibin.qiaqia.base.BaseActivity;
 import com.haibin.qiaqia.base.Constants;
 import com.haibin.qiaqia.entity.User;
@@ -38,13 +40,15 @@ public class LoginPassWordActivity extends BaseActivity {
     @BindView(R.id.tv_go_register) TextView tvGoRegister;
     @BindView(R.id.activity_login) RelativeLayout activityLogin;
     private SubscriberOnNextListener<User> loginSubListener;
+    private int loginType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+        Application.getInstance().addActivity(this);
+        loginType = getIntent().getIntExtra("loginType", 0);
     }
 
     @Override
@@ -73,7 +77,9 @@ public class LoginPassWordActivity extends BaseActivity {
                     SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_LOGIN,Constants.LOGIN_STATUS,user.getData().getIUserLogin().getStatus());
                     SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_LOGIN,Constants.LOGIN_TYPE,1);
                     SPUtils.setParam(LoginPassWordActivity.this, Constants.USER_INFO,Constants.INFO_ID,user.getData().getIUserInfo().getLoginId());
-                    startActivity(new Intent(LoginPassWordActivity.this, MainActivity.class));
+                    if (loginType == 0){
+                        startActivity(new Intent(LoginPassWordActivity.this, MainActivity.class));
+                    }
                     finish();
                 }else
                     Toast.makeText(LoginPassWordActivity.this,user.getMessage(),Toast.LENGTH_LONG).show();
@@ -100,6 +106,8 @@ public class LoginPassWordActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_sms_login:
+                startActivity(new Intent(LoginPassWordActivity.this,MessageLoginActivity.class));
+                this.finish();
                 break;
             case R.id.btn_login:
                 if (checkStatus()){
@@ -121,5 +129,14 @@ public class LoginPassWordActivity extends BaseActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            Application.getInstance().exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

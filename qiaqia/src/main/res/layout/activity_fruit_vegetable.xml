@@ -45,6 +45,7 @@
         tl:tl_tab_space_equal="true"
         tl:tl_indicator_color="#eeeeee"
         app:tl_textSelectColor="#000000"
+        app:tl_textsize="18.5dp"
         app:tl_textUnselectColor="#000000"
         tl:tl_indicator_style="TRIANGLE"
         android:layout_alignParentTop="true"
@@ -89,20 +90,20 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/yuan"
+            android:background="@mipmap/yuan"
             android:layout_marginLeft="36dp"
             android:visibility="gone"
             android:layout_alignParentTop="true"
             />
         <TextView
             android:id="@+id/vf_goodsNum"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
             android:text="5"
             android:gravity="center"
             android:background="@mipmap/yuan"
             android:layout_marginLeft="36dp"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:layout_alignParentTop="true"
             />
     </RelativeLayout>

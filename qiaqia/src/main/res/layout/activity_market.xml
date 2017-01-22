@@ -97,13 +97,13 @@
             />
         <TextView
             android:id="@+id/mark_goodsNum"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
             android:text="5"
             android:gravity="center"
             android:background="@mipmap/yuan"
             android:layout_marginLeft="36dp"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:layout_alignParentTop="true"
             />
     </RelativeLayout>

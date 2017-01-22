@@ -187,16 +187,19 @@ public class SplashActivity extends BaseActivity implements AMapLocationListener
      * 根据保存的登陆信息 跳转不同界面
      */
     private void chooseActivity() {
-        int loginType = (int) SPUtils.getParam(context, Constants.USER_LOGIN, Constants.LOGIN_TYPE, 0);
-        if (loginType == 0) {
-            startActivity(new Intent(context, LoginPassWordActivity.class));
-            finish();
-        } else if (loginType == 1) {
-            String phone = (String) SPUtils.getParam(context, Constants.USER_LOGIN, Constants.LOGIN_PHONE, "");
-            String password = (String) SPUtils.getParam(context, Constants.USER_LOGIN, Constants.LOGIN_PASSWORD, "");
-            HttpMethods.getInstance().Login(new ProgressSubscriber<User>(loginSubListener, SplashActivity.this), phone,
-                    password);
-        }
+//        int loginType = (int) SPUtils.getParam(context, Constants.USER_LOGIN, Constants.LOGIN_TYPE, 0);
+//        int loginType = 1;
+//        if (loginType == 0) {
+//            startActivity(new Intent(context, LoginPassWordActivity.class));
+//            finish();
+//        } else if (loginType == 1) {
+//            String phone = (String) SPUtils.getParam(context, Constants.USER_LOGIN, Constants.LOGIN_PHONE, "");
+//            String password = (String) SPUtils.getParam(context, Constants.USER_LOGIN, Constants.LOGIN_PASSWORD, "");
+//            HttpMethods.getInstance().Login(new ProgressSubscriber<User>(loginSubListener, SplashActivity.this), phone,
+//                    password);
+//        }
+        startActivity(new Intent(context, MainActivity.class));
+        finish();
     }
 
 

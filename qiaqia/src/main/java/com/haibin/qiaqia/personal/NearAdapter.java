@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.nearby.NearbyInfo;
 import com.haibin.qiaqia.R;
 import com.haibin.qiaqia.entity.Vp;
 

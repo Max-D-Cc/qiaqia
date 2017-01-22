@@ -46,6 +46,28 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rela_waimai"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/img_waimai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/waimai" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_waimai"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="美食" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/rela_fruit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

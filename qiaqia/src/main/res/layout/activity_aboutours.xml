@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
     android:orientation="vertical"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
     <include layout="@layout/include_titlebar"/>
     
@@ -39,7 +44,7 @@
             android:layout_toRightOf="@+id/point_img"
             android:gravity="center_vertical"
             android:text="恰恰用户协议"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -75,7 +80,7 @@
             android:layout_toRightOf="@+id/point_img"
             android:gravity="center_vertical"
             android:text="商务合作"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -94,7 +99,7 @@
             android:text="400-070-5176"
             android:layout_marginRight="10dp"
             android:textColor="@color/blue_btn_bg_color"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/ao_1"
@@ -124,7 +129,7 @@
             android:layout_toRightOf="@+id/point_img"
             android:gravity="center_vertical"
             android:text="恰恰官网"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -143,7 +148,7 @@
             android:text="www.janguojob.com"
             android:layout_marginRight="10dp"
             android:textColor="@color/blue_btn_bg_color"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/ao_2"
@@ -158,41 +163,29 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/ao_loginout"
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:layout_gravity="center"
-        android:background="@color/white"
-        android:gravity="center_vertical">
-
-
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/point_img"
-            android:gravity="center_vertical"
-            android:text="退出登录"
-            android:textSize="16dp" />
-
-        <TextView
+            android:id="@+id/ao_loginout"
             android:layout_width="match_parent"
-            android:layout_height="0.7dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="3dp"
-            android:background="@color/gray_split_color" />
+            android:background="@color/red"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:text="退出登录"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_height="40dp" />
 
+    </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:gravity="center_vertical"
-            android:src="@mipmap/jiantou"
-            android:textColor="@color/app_bg" />
-
-    </RelativeLayout>
-</LinearLayout>
+    <TextView
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginBottom="20dp"
+        android:text="爱生活 爱恰恰"
+        android:gravity="center"
+        />
+</RelativeLayout>

@@ -206,13 +206,13 @@ public class SerachActivity extends BaseActivity implements View.OnClickListener
                 public void onClick(View v) {
                     String str = view.getText().toString().trim();
                     serachEt.setText(str);
-                    if (serachRecordList != null) {
+                   /* if (serachRecordList != null) {
                         serachRecordList.add(str);
                         SPUtils.setListSP(SerachActivity.this, "serach", "serachList", serachRecordList);
                     } else {
                         strList.add(str);
                         SPUtils.setListSP(SerachActivity.this, "serach", "serachList", strList);
-                    }
+                    }*/
                 }
             });
         }

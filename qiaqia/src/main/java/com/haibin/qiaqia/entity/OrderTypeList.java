@@ -1,12 +1,13 @@
 package com.haibin.qiaqia.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by cai on 2016/8/25.
  */
 
-public class OrderTypeList {
+public class OrderTypeList implements Serializable{
 
     private List<OrderType> list_orders;
 

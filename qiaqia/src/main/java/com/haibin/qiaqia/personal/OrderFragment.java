@@ -29,6 +29,7 @@ import com.haibin.qiaqia.home.HomeAdapter;
 import com.haibin.qiaqia.http.HttpMethods;
 import com.haibin.qiaqia.http.ProgressSubscriber;
 import com.haibin.qiaqia.http.SubscriberOnNextListener;
+import com.haibin.qiaqia.listener.RecyclerItemClickListener;
 import com.haibin.qiaqia.utils.LogUtils;
 import com.haibin.qiaqia.utils.SPUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -54,6 +55,7 @@ public class OrderFragment extends BaseFragment {
     public List<OrderType> listOrders = new ArrayList<OrderType>();
     SubscriberOnNextListener<OrderTypeList> SubListener;
     private String mTitle = null;
+    private OrderTypeList orderType;
 
     public static OrderFragment getInstance(String title) {
         OrderFragment fft = new OrderFragment();
@@ -81,17 +83,26 @@ public class OrderFragment extends BaseFragment {
         recyclerviewFruit.setAdapter(adapter);
         //设置Item增加、移除动画
         recyclerviewFruit.setItemAnimator(new DefaultItemAnimator());
-        adapter.setOnItemClickListener(new MyOrderAdapter.OnItemClickListener() {
+        recyclerviewFruit.setPullRefreshEnabled(false);
+        recyclerviewFruit.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerviewFruit, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void itemClick(View view, int position) {
-                List<ListChaoCommodity> goodList = listOrders.get(position).getList_commodity();
-                Goods goods = new Goods();
-                goods.setListChaoCommodity(goodList);
-                Intent intent = new Intent(getActivity(),OrderActivity.class);
-                intent.putExtra("balanceData",goods);
-                startActivity(intent);
+            public void onItemClick(View view, int position) {
+                if (mTitle.equals("0")){
+
+                }else{
+                    OrderType orderType1 = OrderFragment.this.orderType.getList_orders().get(position-1);
+                    Intent intent = new Intent(getActivity(),DetailsActivity.class);
+                    intent.putExtra("balanceData", orderType1);
+                    startActivity(intent);
+                }
             }
-        });
+            @Override
+            public void onItemLongClick(View view, int position) {
+//                int id = listChaoCommodities.get(position).getId();
+//                Toast.makeText(getActivity(),"postion: " + position,Toast.LENGTH_SHORT).show();
+//                deleteDialog(listChaoCommodities1.get(position).getId(),position,1);
+            }
+        }));
     }
 
     private void initData() {
@@ -101,6 +112,7 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void onNext(OrderTypeList orderTypeList) {
                 if (orderTypeList != null) {
+                    orderType = orderTypeList;
                     List<OrderType> list_orders = orderTypeList.getList_orders();
 //                    Toast.makeText(getActivity(),"list.size:"+list_orders.size(),Toast.LENGTH_SHORT).show();
                     LogUtils.e("list.size:",list_orders.size()+"");

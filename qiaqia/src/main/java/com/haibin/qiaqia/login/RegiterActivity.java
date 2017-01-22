@@ -3,7 +3,10 @@ package com.haibin.qiaqia.login;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,15 +39,24 @@ import okhttp3.Response;
 
 public class RegiterActivity extends BaseActivity {
 
-    @BindView(R.id.btn_back) ImageView btnBack;
-    @BindView(R.id.et_phone) EditText etPhone;
-    @BindView(R.id.btn_sms) Button btnSms;
-    @BindView(R.id.et_sms) EditText etSms;
-    @BindView(R.id.et_ps1) EditText etPs1;
-    @BindView(R.id.et_ps2) EditText etPs2;
-    @BindView(R.id.img_check) ImageView imgCheck;
-    @BindView(R.id.btn_register) Button btnRegister;
-    @BindView(R.id.activity_regiter) LinearLayout activityRegiter;
+    @BindView(R.id.btn_back)
+    ImageView btnBack;
+    @BindView(R.id.et_phone)
+    EditText etPhone;
+    @BindView(R.id.btn_sms)
+    Button btnSms;
+    @BindView(R.id.et_sms)
+    EditText etSms;
+    @BindView(R.id.et_ps1)
+    EditText etPs1;
+    @BindView(R.id.et_ps2)
+    EditText etPs2;
+    @BindView(R.id.img_check)
+    ImageView imgCheck;
+    @BindView(R.id.btn_register)
+    Button btnRegister;
+    @BindView(R.id.activity_regiter)
+    LinearLayout activityRegiter;
     private SubscriberOnNextListener<User> registerSubListener;
 
     @Override
@@ -53,26 +65,68 @@ public class RegiterActivity extends BaseActivity {
         setContentView(R.layout.activity_regiter);
         ButterKnife.bind(this);
         //处理接口返回的数据
-        registerSubListener= new SubscriberOnNextListener<User>() {
+        registerSubListener = new SubscriberOnNextListener<User>() {
 
             @Override
             public void onNext(User user) {
-                if (user.getCode().equals("200")){
-                    Toast.makeText(RegiterActivity.this,"注册成功",Toast.LENGTH_LONG).show();
-                    SPUtils.setParam(RegiterActivity.this, Constants.USER_LOGIN,Constants.LOGIN_PHONE,user.getData().getIUserLogin().getPhone());
-                    SPUtils.setParam(RegiterActivity.this, Constants.USER_LOGIN,Constants.LOGIN_PASSWORD,user.getData().getIUserLogin().getPassword());
-                    SPUtils.setParam(RegiterActivity.this, Constants.USER_LOGIN,Constants.LOGIN_STATUS,user.getData().getIUserLogin().getStatus());
-                    SPUtils.setParam(RegiterActivity.this, Constants.USER_LOGIN,Constants.LOGIN_TYPE,1);
-                    SPUtils.setParam(RegiterActivity.this, Constants.USER_INFO,Constants.INFO_IMG,user.getData().getIUserInfo().getNameImage());
-                    SPUtils.setParam(RegiterActivity.this, Constants.USER_INFO,Constants.INFO_ID,user.getData().getIUserInfo().getLoginId());
-                    SPUtils.setParam(RegiterActivity.this, Constants.USER_INFO,Constants.INFO_NAME,user.getData().getIUserInfo().getName());
+                if (user.getCode().equals("200")) {
+                    Toast.makeText(RegiterActivity.this, "注册成功", Toast.LENGTH_LONG).show();
+                    SPUtils.setParam(RegiterActivity.this, Constants.USER_LOGIN, Constants.LOGIN_PHONE, user.getData().getIUserLogin().getPhone());
+                    SPUtils.setParam(RegiterActivity.this, Constants.USER_LOGIN, Constants.LOGIN_PASSWORD, user.getData().getIUserLogin().getPassword());
+                    SPUtils.setParam(RegiterActivity.this, Constants.USER_LOGIN, Constants.LOGIN_STATUS, user.getData().getIUserLogin().getStatus());
+                    SPUtils.setParam(RegiterActivity.this, Constants.USER_LOGIN, Constants.LOGIN_TYPE, 1);
+                    SPUtils.setParam(RegiterActivity.this, Constants.USER_INFO, Constants.INFO_IMG, user.getData().getIUserInfo().getNameImage());
+                    SPUtils.setParam(RegiterActivity.this, Constants.USER_INFO, Constants.INFO_ID, user.getData().getIUserInfo().getLoginId());
+                    SPUtils.setParam(RegiterActivity.this, Constants.USER_INFO, Constants.INFO_NAME, user.getData().getIUserInfo().getName());
                     startActivity(new Intent(RegiterActivity.this, MainActivity.class));
                     finish();
-                }else
-                    Toast.makeText(RegiterActivity.this,user.getMessage(),Toast.LENGTH_LONG).show();
-
+                } else{
+//                    Toast.makeText(RegiterActivity.this, "注册失败", Toast.LENGTH_LONG).show();
+                }
             }
         };
+
+        imgCheck.setVisibility(View.INVISIBLE);
+        etPs2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String string = s.toString();
+                String s1 = etPs1.getText().toString();
+                if (string.equals(s1)){
+                    imgCheck.setVisibility(View.VISIBLE);
+                }else{
+                    imgCheck.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);// 参数依次为总时长,和计时的时间间隔
+        }
+
+        @Override
+        public void onFinish() {// 计时完毕时触发
+            btnSms.setText("验证码");
+            btnSms.setClickable(true);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {// 计时过程显示
+            btnSms.setText(millisUntilFinished/1000 + "秒");
+
+        }
     }
 
     @Override
@@ -107,27 +161,30 @@ public class RegiterActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_sms:
-                if (etPhone.getText().toString().trim()==null||etPhone.getText().toString().trim().equals("")){
+                if (etPhone.getText().toString().trim() == null || etPhone.getText().toString().trim().equals("")) {
                     showShortToast("请输入手机号码");
                     break;
-                }else if (etPhone.getText().toString().trim().length()==10){
+                } else if (etPhone.getText().toString().trim().length() == 10) {
                     showShortToast("手机号码不正确");
                     break;
                 }
+                TimeCount time = new TimeCount(60000,1000);
+                time.start();
+                btnSms.setClickable(false);
 //                UserRegisterTask userRegisterTask=new UserRegisterTask(etPhone.getText().toString().trim(),
 //                        etPs1.getText().toString().trim(),etSms.getText().toString().trim());
 //                userRegisterTask.execute();
-                HttpMethods.getInstance().getSms(new ProgressSubscriber<String>(registerSubListener,this),etPhone.getText().toString().trim()
-                        );
+                HttpMethods.getInstance().getSms(new ProgressSubscriber<String>(registerSubListener, this), etPhone.getText().toString().trim()
+                );
 
                 break;
             case R.id.btn_register:
-                if ( checkStatus()){
+                if (checkStatus()) {
 //                    UserRegisterTask userRegisterTask1=new UserRegisterTask(etPhone.getText().toString().trim(),
 //                            etPs1.getText().toString().trim(),etSms.getText().toString().trim());
 //                    userRegisterTask1.execute();
-                    HttpMethods.getInstance().toRegister(new ProgressSubscriber<User>(registerSubListener,this),etPhone.getText().toString().trim(),
-                            MD5Util.MD5(etPs1.getText().toString().trim()),etSms.getText().toString().trim());
+                    HttpMethods.getInstance().toRegister(new ProgressSubscriber<User>(registerSubListener, this), etPhone.getText().toString().trim(),
+                            MD5Util.MD5(etPs1.getText().toString().trim()), etSms.getText().toString().trim());
                 }
 
                 break;
@@ -135,26 +192,24 @@ public class RegiterActivity extends BaseActivity {
     }
 
     private boolean checkStatus() {
-        if (etPhone.getText().toString().trim()==null||etPhone.getText().toString().trim().equals("")){
+        if (etPhone.getText().toString().trim() == null || etPhone.getText().toString().trim().equals("")) {
             showShortToast("请输入手机号码");
             return false;
-        }else if (etPhone.getText().toString().trim().length()==10){
+        } else if (etPhone.getText().toString().trim().length() == 10) {
             showShortToast("手机号码不正确");
             return false;
-        }else if (etSms.getText().toString().trim()==null||etSms.getText().toString().trim().equals("")){
+        } else if (etSms.getText().toString().trim() == null || etSms.getText().toString().trim().equals("")) {
             showShortToast("请输入验证码");
             return false;
-        }else if (etPs1.getText().toString().trim()==null||etPs1.getText().toString().trim().equals("")||etPs2.getText().toString().trim()==null||etPs2.getText().toString().trim().equals("")){
+        } else if (etPs1.getText().toString().trim() == null || etPs1.getText().toString().trim().equals("") || etPs2.getText().toString().trim() == null || etPs2.getText().toString().trim().equals("")) {
             showShortToast("请输入密码");
             return false;
-        }else if (!etPs1.getText().toString().trim().equals(etPs2.getText().toString().trim())){
+        } else if (!etPs1.getText().toString().trim().equals(etPs2.getText().toString().trim())) {
             showShortToast("两次输入的密码不相同");
             return false;
         }
         return true;
     }
-
-
 
 
     /**
@@ -164,12 +219,12 @@ public class RegiterActivity extends BaseActivity {
 
         private final String tel;
         private final String passWord;
-        private final  String sms;
+        private final String sms;
 
-        UserRegisterTask(String phoneNum, String passWord ,String sms) {
+        UserRegisterTask(String phoneNum, String passWord, String sms) {
             this.tel = phoneNum;
             this.passWord = passWord;
-            this.sms=sms;
+            this.sms = sms;
         }
 
         protected User doInBackground(Void... params) {
@@ -208,9 +263,11 @@ public class RegiterActivity extends BaseActivity {
                         @Override
                         public BaseBean parseNetworkResponse(Response response) throws Exception {
                             String string = response.body().string();
-                            BaseBean user = new Gson().fromJson( string, new TypeToken<BaseBean<User>>(){}.getType());
+                            BaseBean user = new Gson().fromJson(string, new TypeToken<BaseBean<User>>() {
+                            }.getType());
                             return user;
                         }
+
                         @Override
                         public void onError(Call call, Exception e) {
                             Message message = new Message();
@@ -219,10 +276,10 @@ public class RegiterActivity extends BaseActivity {
 
                         @Override
                         public void onResponse(BaseBean response) {
-                            if (response.getCode().equals("")){
+                            if (response.getCode().equals("")) {
                                 Message message = new Message();
                                 message.obj = response;
-                            }else{
+                            } else {
                                 Message message = new Message();
                                 message.obj = response.getMessage();
                             }

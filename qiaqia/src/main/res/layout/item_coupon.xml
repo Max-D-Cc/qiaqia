@@ -44,7 +44,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginRight="20dp"
                 android:text="可使用"
-                android:textColor="@color/app_color"
+                android:textColor="@color/textgray"
                 android:textSize="18sp" />
         </RelativeLayout>
 

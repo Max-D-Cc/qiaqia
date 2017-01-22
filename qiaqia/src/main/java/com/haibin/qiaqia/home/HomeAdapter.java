@@ -68,6 +68,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 .placeholder(R.drawable.ic_loading_rotate)
                 .transform(new GlideRoundTransform(context))
                 .into(holder.img);
+        holder.tvGoodsPrice.setText("￥" + data.getPrice());
         holder.itemView.setTag(data);
     }
 

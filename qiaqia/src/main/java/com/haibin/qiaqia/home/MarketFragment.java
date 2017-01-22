@@ -109,6 +109,11 @@ public class MarketFragment extends BaseFragment implements MyItemClickListener 
                     HttpMethods.getInstance().getChangeCarGoods(new ProgressSubscriber<Goods>(SubListener, getActivity()), String.valueOf(loginId), String.valueOf(commodityid), String.valueOf(count - 1));
                 }
             }
+
+            @Override
+            public void onImgClick(int position) {
+
+            }
         });
 
         initData();
